@@ -161,6 +161,7 @@ namespace DoAnPhanMem.Controllers
                 db.SaveChanges();
             }
             return Json(JsonRequestBehavior.AllowGet);
+
         }
         public ActionResult Address()
         {
