@@ -224,7 +224,7 @@ namespace DoAnPhanMem.Controllers
             ViewBag.Count = cart.Item1.Count();
             return PartialView();
         }
-        public async ActionResult SaveOrder(string note, string emailID, string orderID, string orderItem, string orderDiscount, string orderPrice, string orderTotal)
+        public ActionResult SaveOrder(string note, string orderID, string orderItem, string orderDiscount, string orderPrice, string orderTotal, string oder_address)
         {
             var TK = Session["TaiKhoan"] as Account;
             try
@@ -232,7 +232,7 @@ namespace DoAnPhanMem.Controllers
                 var culture = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
                 double priceSum = 0;
 
-                string productquancheck = "0";
+                int productquancheck = 0;
                 if (Session["Discount"] != null && Session["Discountcode"] != null)
                 {
                     string check_discount = Session["Discountcode"].ToString();
@@ -249,52 +249,44 @@ namespace DoAnPhanMem.Controllers
                     status = "1",
                     order_note = Request.Form["OrderNote"].ToString(),
                     delivery_id = 1,
-                    orderAddressId = orderAdress.orderAddressId,
-                    oder_date = DateTime.Now,
-                    update_at = DateTime.Now,
+                    oder_address = oder_address,
                     payment_id = 1,
-                    update_by = User.Identity.GetUserId().ToString(),
                     total = Convert.ToDouble(TempData["Total"])
                 };
+
                 for (int i = 0; i < cart.Item1.Count; i++)
                 {
                     var item = cart.Item1[i];
                     var _price = item.price;
                     if (item.Discount != null)
                     {
-                        if (item.Discount.discount_star < DateTime.Now && item.Discount.discount_end > DateTime.Now)
+                        if (item.Discount.discount_start < DateTime.Now && item.Discount.discount_end > DateTime.Now)
                         {
                             _price = item.price - item.Discount.discount_price;
                         }
                     }
                     order.Oder_Detail.Add(new Oder_Detail
                     {
-                        create_at = DateTime.Now,
-                        create_by = User.Identity.GetUserId().ToString(),
-                        disscount_id = item.disscount_id,
-                        genre_id = item.genre_id,
+                        pro_id = item.pro_id,
+                        discount_id = item.discount_id,
+                        cate_id = item.cate_id,
                         price = _price,
-                        product_id = item.product_id,
                         quantity = cart.Item2[i],
                         status = "1",
-                        update_at = DateTime.Now,
-                        update_by = User.Identity.GetUserId().ToString(),
-                        transection = "transection"
                     });
-                    // Xóa cart
-                    Response.Cookies["product_" + item.product_id].Expires = DateTime.Now.AddDays(-10);
+                    //xóa giỏ hàng
+                    Session["Cart"] = null;
+
                     // Thay đổi số lượng và số lượt mua của product 
-                    var product = db.Products.SingleOrDefault(p => p.product_id == item.product_id);
+                    var product = db.Products.SingleOrDefault(p => p.pro_id == item.pro_id);
                     productquancheck = product.quantity;
                     product.buyturn += cart.Item2[i];
-                    product.quantity = (Convert.ToInt32(product.quantity ?? "0") - cart.Item2[i]).ToString();
+                    product.quantity = product.quantity - cart.Item2[i];
                     listProduct.Add(product);
                     priceSum += (_price * cart.Item2[i]);
-                    orderItem += "<tr style='margin'> <td align='left' width='75%' style=' padding: 6px 12px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;' >" +
-                                product.product_name + "</td><td align='left' width='25%' style=' padding: 6px 12px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; ' >" + product.price.ToString("#,0₫", culture.NumberFormat) + "</td> </tr>";
                 }
                 //thêm dữ liệu vào table
-                if (productquancheck.Trim() != "0")
+                if (productquancheck ==  0)
                 {
                     db.Orders.Add(order);
                 }
@@ -304,16 +296,9 @@ namespace DoAnPhanMem.Controllers
                     return RedirectToAction("ViewCart", "Cart");
                 }
                 db.Configuration.ValidateOnSaveEnabled = false;
-
-                await db.SaveChangesAsync();
-                Notification.setNotification3s("Đặt hàng thành công", "success");
+                db.SaveChangesAsync();
                 Session.Remove("Discount");
                 Session.Remove("Discountcode");
-                emailID = TK.email;
-                orderID = order.order_id.ToString();
-                orderDiscount = (priceSum + 30000 - order.total).ToString("#,0₫", culture.NumberFormat);
-                orderPrice = priceSum.ToString("#,0₫", culture.NumberFormat);
-                orderTotal = order.total.ToString("#,0₫", culture.NumberFormat);
                 Notification.setNotification3s("Đặt hàng thành công", "success");
                 return RedirectToAction("TrackingOrder", "Account");
             }
