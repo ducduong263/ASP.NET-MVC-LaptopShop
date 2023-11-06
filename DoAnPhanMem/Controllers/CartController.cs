@@ -224,7 +224,7 @@ namespace DoAnPhanMem.Controllers
             ViewBag.Count = cart.Item1.Count();
             return PartialView();
         }
-        public ActionResult SaveOrder(string note, string orderID, string orderItem, string orderDiscount, string orderPrice, string orderTotal, string oder_address)
+        public ActionResult SaveOrder(string note, string oder_address)
         {
             var TK = Session["TaiKhoan"] as Account;
             try
@@ -251,7 +251,8 @@ namespace DoAnPhanMem.Controllers
                     delivery_id = 1,
                     oder_address = oder_address,
                     payment_id = 1,
-                    total = Convert.ToDouble(TempData["Total"])
+                    total = Convert.ToDouble(TempData["Total"]),
+                    note = note
                 };
 
                 for (int i = 0; i < cart.Item1.Count; i++)
@@ -300,7 +301,7 @@ namespace DoAnPhanMem.Controllers
                 Session.Remove("Discount");
                 Session.Remove("Discountcode");
                 Notification.setNotification3s("Đặt hàng thành công", "success");
-                return RedirectToAction("TrackingOrder", "Account");
+                return RedirectToAction("Index", "Home");
             }
             catch
             {

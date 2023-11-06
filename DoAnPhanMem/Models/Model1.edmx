@@ -117,6 +117,7 @@
           <Property Name="status" Type="char" MaxLength="1" />
           <Property Name="order_note" Type="nvarchar" MaxLength="200" />
           <Property Name="oder_address" Type="nvarchar" MaxLength="200" />
+          <Property Name="note" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -592,6 +593,7 @@
           <NavigationProperty Name="Oder_Detail" Relationship="Self.FK_Oder_Detail_Order" FromRole="Order" ToRole="Oder_Detail" />
           <NavigationProperty Name="Payment" Relationship="Self.FK_Order_Payment" FromRole="Order" ToRole="Payment" />
           <Property Name="oder_address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -1054,6 +1056,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="WebshopModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="note" ColumnName="note" />
                 <ScalarProperty Name="oder_address" ColumnName="oder_address" />
                 <ScalarProperty Name="order_id" ColumnName="order_id" />
                 <ScalarProperty Name="payment_id" ColumnName="payment_id" />
