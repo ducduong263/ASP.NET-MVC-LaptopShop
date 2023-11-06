@@ -17,6 +17,7 @@
           <Property Name="phone" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="avatar" Type="text" />
           <Property Name="role_id" Type="int" Nullable="false" />
+          <Property Name="address" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="AccountAddress">
           <Key>
@@ -474,6 +475,7 @@
           <NavigationProperty Name="Feedbacks" Relationship="Self.FK_Feedback_Account" FromRole="Account" ToRole="Feedback" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Order_Account" FromRole="Account" ToRole="Order" />
           <NavigationProperty Name="ReplyFeedbacks" Relationship="Self.FK_ReplyFeedback_Account" FromRole="Account" ToRole="ReplyFeedback" />
+          <Property Name="address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AccountAddress">
           <Key>
@@ -946,6 +948,7 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="WebshopModel.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="address" ColumnName="address" />
                 <ScalarProperty Name="acc_id" ColumnName="acc_id" />
                 <ScalarProperty Name="acc_password" ColumnName="acc_password" />
                 <ScalarProperty Name="acc_status" ColumnName="acc_status" />

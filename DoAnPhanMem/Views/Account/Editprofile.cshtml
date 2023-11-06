@@ -76,7 +76,7 @@
                                                 </div>
                                                 <div class="default-form-box mb-20">
                                                     <label>Địa chỉ<span class="text-danger">*</span></label>
-                                                    @Html.EditorFor(model => model.address, new { htmlAttributes = new { type = "number" } })
+                                                    @Html.EditorFor(model => model.address, new { htmlAttributes = new { type = "text" } })
                                                     @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
                                                 </div>
                                                 <div class="save_button mt-3">

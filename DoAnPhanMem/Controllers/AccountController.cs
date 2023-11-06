@@ -17,22 +17,29 @@ namespace DoAnPhanMem.Controllers
     {
         private WebshopEntities db = new WebshopEntities();
         // GET: Account
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
             LoginViewModels model = new LoginViewModels();
-            //Account model = new Account();
+            if (String.IsNullOrEmpty(returnUrl) && Request.UrlReferrer != null && Request.UrlReferrer.ToString().Length > 0)
+            {
+                return RedirectToAction("Login", new { returnUrl = Request.UrlReferrer.ToString() });
+            }
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginViewModels model)
+        public ActionResult Login(LoginViewModels model, string returnUrl)
         {
             Account account = db.Accounts.FirstOrDefault(m => m.email == model.email && m.acc_password == model.acc_password && m.acc_status == "1");
             if (account != null)
             {
                 Session["TaiKhoan"] = account;
                 Notification.setNotification1_5s("Đăng nhập thành công", "success");
-                return RedirectToAction("Index", "Home");
+                if (!String.IsNullOrEmpty(returnUrl))
+                    return Redirect(returnUrl);
+                else
+                    return RedirectToAction("Index", "Home");
+
             }
             Notification.setNotification3s("Email, mật khẩu không đúng, hoặc tài khoản bị vô hiệu hóa", "error");
             return View(model);
@@ -96,12 +103,12 @@ namespace DoAnPhanMem.Controllers
         {
             var user = Session["TaiKhoan"] as Account;
             Account account = db.Accounts.FirstOrDefault(m => m.acc_id == user.acc_id);
-            if(model.OldPassword != account.acc_password)
+            if (model.OldPassword != account.acc_password)
             {
                 Notification.setNotification3s("Mật khẩu cũ không chính xác!", "error");
                 return View(model);
             }
-                
+
             if (model.NewPassword == account.acc_password)
             {
                 Notification.setNotification3s("Mật khẩu mới và cũ không được trùng!", "error");
@@ -120,12 +127,12 @@ namespace DoAnPhanMem.Controllers
             var user = db.Accounts.Where(u => u.acc_id == userId.acc_id).FirstOrDefault();
             if (user != null)
             {
-                return View(user); 
+                return View(user);
             }
             return RedirectToAction("Index", "Home");
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]  
+        [ValidateAntiForgeryToken]
         public ActionResult Editprofile(Account acc)
         {
             var user = Session["TaiKhoan"] as Account;
@@ -183,7 +190,7 @@ namespace DoAnPhanMem.Controllers
             var limit_address = db.AccountAddresses.Where(m => m.acc_id == userid).ToList();
             try
             {
-               
+
                 foreach (var item in checkdefault)
                 {
                     if (item.isDefault == true && address.isDefault == true)
@@ -204,5 +211,6 @@ namespace DoAnPhanMem.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
+
     }
 }

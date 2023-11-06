@@ -1,5 +1,5 @@
-﻿@using DAPM.Models
-@using DAPM.Common
+﻿@using DoAnPhanMem.Models
+@*@using DoAnPhanMem.Common*@
 @model IEnumerable<Product>
 @{
     ViewBag.Title = "Giỏ hàng";
@@ -7,8 +7,11 @@
     var culture = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
     List<int> quans = ViewBag.Quans as List<int>;
     double totalPrice = 0d;
-    double shippingFee = 30000d;    // Phí vận chuyển 30k
+
+    var discountPrice = Convert.ToDouble(ViewBag.Discount);
+    var total = Convert.ToDouble(ViewBag.Total);    // Giá sau khi áp dụng mã giảm giá, được tính ở controller
 }
+
 <!-- ...:::: Start Breadcrumb Section:::... -->
 <div class="breadcrumb-section breadcrumb-bg-color--black">
     <div class="breadcrumb-wrapper">
@@ -58,24 +61,24 @@
                                         var item = Model.ElementAt(i);
                                         var quan = quans[i];
                                         var price = item.price;
-                                        int maxquantity = Int32.Parse(item.quantity);
+                                        int maxquantity = item.quantity;
                                         <!-- Start Cart Single Item-->
                                         <tr class="item">
                                             <td class="product_remove">
-                                                <a class="js-delete" style="cursor:pointer;" data-id="@item.product_id"><i class="fa fa-trash-o"></i></a>
+                                                <a class="js-delete" style="cursor:pointer;" data-id="@item.pro_id"><i class="fa fa-trash-o"></i></a>
                                             </td>
                                             <td class="product_thumb">
-                                                <a target="_blank" href="~/@SlugGenerator.SlugGenerator.GenerateSlug(item.product_name)-@item.product_id">
-                                                    <img src="@item.image" alt="">
+                                                <a target="_blank" href="~/@SlugGenerator.SlugGenerator.GenerateSlug(item.pro_name)-@item.pro_id">
+                                                    <img src="@item.pro_img" alt="">
                                                 </a>
                                             </td>
                                             <td class="product_name">
-                                                <a target="_blank" href="~/@SlugGenerator.SlugGenerator.GenerateSlug(item.product_name)-@item.product_id">
-                                                    @item.product_name
+                                                <a target="_blank" href="~/@SlugGenerator.SlugGenerator.GenerateSlug(item.pro_name)-@item.pro_id">
+                                                    @item.pro_name
                                                 </a>
                                             </td>
                                             <td class="product-price">
-                                                @if (item.Discount.discount_star < DateTime.Now && item.Discount.discount_end > DateTime.Now)
+                                                @if (item.Discount.discount_start < DateTime.Now && item.Discount.discount_end > DateTime.Now)
                                                 {
                                                     price = item.price - item.Discount.discount_price;
                                                     <div style="color:#808080;font-size: 13px;">
@@ -100,11 +103,11 @@
                                                         <a class="btn bg-transparent value-button btn-dec" data-action="minus"><i class="fa fa-minus" style="font-size: 12px; color: #545454;"></i></a>
                                                         @if (quan >= maxquantity)
                                                         {
-                                                            <input type="number" autocomplete="off" class="qty-input" min="1" max="@item.quantity" data-price="@price" data-quan="@item.quantity" data-id="@item.product_id" value="@item.quantity" name="quantity" oninput="validity.valid || (value = '1');" title="số lượng" style="background: transparent;" />
+                                                            <input type="number" autocomplete="off" class="qty-input" min="1" max="@item.quantity" data-price="@price" data-quan="@item.quantity" data-id="@item.pro_id" value="@item.quantity" name="quantity" oninput="validity.valid || (value = '1');" title="số lượng" style="background: transparent;" />
                                                         }
                                                         else
                                                         {
-                                                            <input type="number" autocomplete="off" class="qty-input" min="1" max="@item.quantity" data-price="@price" data-quan="@item.quantity" data-id="@item.product_id" value="@quan" name="quantity" oninput="validity.valid || (value = '1');" title="số lượng" style="background: transparent;" />
+                                                            <input type="number" autocomplete="off" class="qty-input" min="1" max="@item.quantity" data-price="@price" data-quan="@item.quantity" data-id="@item.pro_id" value="@quan" name="quantity" oninput="validity.valid || (value = '1');" title="số lượng" style="background: transparent;" />
                                                         }
                                                         <a class="btn bg-transparent value-button btn-inc" data-action="add"><i class="fa fa-plus" style="font-size: 12px; color: #545454;"></i></a>
                                                     </div>
@@ -115,7 +118,7 @@
                                                     double total3 = 0;
                                                     total3 = price * quan;
                                                 }
-                                                <span id="total3-@item.product_id" style="color: #fe8c23; ">
+                                                <span id="total3-@item.pro_id" style="color: #fe8c23; ">
                                                     @total3.ToString("#,0₫", culture.NumberFormat)
                                                 </span>
                                             </td>
@@ -162,19 +165,16 @@
                             </div>
                             <div class="cart_subtotal">
                                 <p>Giảm giá</p>
-                                <p style="font-size:16px;" class="cart_amount" id="discount">0₫</p>
+                                <p style="font-size:16px;" class="cart_amount" id="discount">@discountPrice.ToString("#,0₫", culture.NumberFormat)</p>
                             </div>
-                            <div class="cart_subtotal ">
-                                <p>Phí vận chuyển</p>
-                                <p style="font-size:16px;" class="cart_amount">@shippingFee.ToString("#,0₫", culture.NumberFormat)</p>
-                            </div>
+                            
                             <hr />
                             <div class="cart_subtotal">
-                                <p>Thành tiền</p>
-                                <p style="font-size: 20px; color: rgb(235, 33, 1);" class="cart_amount totalPriceWithFee" >@((totalPrice + shippingFee).ToString("#,0₫", culture.NumberFormat))</p>
+                                <p>Thành tiền </p>
+                                <p style="font-size: 20px; color: rgb(235, 33, 1);" class="cart_amount totalPriceWithFee">@(@ViewBag.Total.ToString("#,0₫", culture.NumberFormat))</p>
                             </div>
                             <div class="checkout_btn">
-                                <a href="@Url.Action("Checkout","Cart")" class="js-checkout btn btn-md btn-golden">Hoàn tất thanh toán</a>
+                                <a href="@Url.Action("Checkout","Cart")" class="btn btn-md btn-golden">Hoàn tất thanh toán</a>
                             </div>
                         </div>
                     </div>

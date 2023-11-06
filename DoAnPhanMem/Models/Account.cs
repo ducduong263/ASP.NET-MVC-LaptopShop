@@ -59,6 +59,8 @@ namespace DoAnPhanMem.Models
         [RegularExpression("^(0)([0-9]{9})$", ErrorMessage = "Số điện thoại phải bắt đầu bằng 0, chứa ký tự số từ (0 -> 9) và đủ 10 chữ số")]
         public string phone { get; set; }
         public string avatar { get; set; }
+
+        [Required(ErrorMessage = "Nhập địa chỉ")]
         public string address { get; set; }
         public int role_id { get; set; }
 

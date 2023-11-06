@@ -224,35 +224,49 @@
                         </div>
                         <!-- Product Variable Single Item -->
                         <div class="d-flex align-items-center">
-                            @if (Model.quantity != 0)
+                            @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post))
                             {
-                                <div class="variable-single-item">
-                                    <span>Số Lượng</span>
-                                    <div class="product-variable-quantity">
-                                        <input step="1" min="1" max="@Model.quantity" id="quantity" autocomplete="off" name="quantity" value="1" type="number" />
+                                var quantity = 1; // Số lượng mặc định
+                                if (Model.quantity != 0)
+                                {
+                                    <div class="variable-single-item">
+                                        <span>Số Lượng</span>
+                                        <div class="product-variable-quantity">
+                                            <input step="1" min="1" max="@Model.quantity" id="quantity" autocomplete="off" name="quantity" value="@quantity" type="number" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="d-flex" style="gap:7px;">
-                                    <div class="product-add-to-cart-btn d-flex">
-                                        <a style="user-select:none!important;" data-id="@Model.pro_id" class="buyNow btn btn-block btn-lg btn-black-default-hover">Mua ngay</a>
+                                    <div class="d-flex" style="gap:7px;">
+                                        @Html.Hidden("productId", Model.pro_id)
+                                        @Html.Hidden("quantity", 1)
+                                        <div class="product-add-to-cart-btn d-flex">
+                                            <button type="submit" style="user-select: none !important;"
+                                                    class="btn btn-block btn-lg btn-black-default-hover">
+                                                Mua ngay
+                                            </button>
+                                        </div>
+                                        @Html.Hidden("productId", Model.pro_id)
+                                        @Html.Hidden("quantity", quantity)
+                                        <div class="product-add-to-cart-btn d-flex">
+                                            <button type="submit" style="user-select: none !important; border-color: #FE8C23; color: #FE8C23;background:#fff;"
+                                                    class="btn btn-block btn-lg btn-black-default-hover">
+                                                Thêm vào giỏ
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="product-add-to-cart-btn d-flex">
-                                        <a style="user-select: none !important; border-color: #FE8C23; color: #FE8C23;background:#fff;" data-id="@Model.pro_id" class="btnAddToCart btn btn-block btn-lg btn-black-default-hover">Thêm vào giỏ</a>
-                                    </div>
-                                </div>
 
-                            }
-                            else
-                            {
-                                <div class="variable-single-item">
-                                    <span>Số Lượng</span>
-                                    <div class="product-variable-quantity">
-                                        <input step="0" min="0" name="quantity" value="0" readonly />
+                                }
+                                else
+                                {
+                                    <div class="variable-single-item">
+                                        <span>Số Lượng</span>
+                                        <div class="product-variable-quantity">
+                                            <input step="0" min="0" name="quantity" value="0" readonly />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="product-add-to-cart-btn">
-                                    <a class="btn btn-block btn-lg btn-black-default-hover"> Liên hệ</a>
-                                </div>
+                                    <div class="product-add-to-cart-btn">
+                                        <a class="btn btn-block btn-lg btn-black-default-hover"> Liên hệ</a>
+                                    </div>
+                                }
                             }
                         </div>
                         <!-- Start  Product Details Meta Area-->
@@ -548,7 +562,7 @@
                                                             </div>
                                                             <div class="para-content">
                                                                 <div>@Html.Raw(comment.content)</div>
-                                                                <p style="font-size: 12px; margin-bottom: 8px; color: #a5a5a5; ">@comment.create_at.ToString("HH:mm dd-MM-yyyy")</p>
+                                                                <p style="font-size: 12px; margin-bottom: 8px; color: #a5a5a5; ">@comment.create_at</p>
                                                             </div>
                                                         </div>
                                                     </div>
