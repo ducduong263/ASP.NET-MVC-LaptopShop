@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace DAPM.Areas.Admin.Controllers
+namespace DoAnPhanMem.Areas.Admin.Controllers
 {
     public class DashBoardsController : BaseController
     {

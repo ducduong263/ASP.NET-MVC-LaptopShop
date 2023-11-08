@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace DAPM.Areas.Admin.Controllers
+namespace DoAnPhanMem.Areas.Admin.Controllers
 {
     public class BaseController : Controller
     {

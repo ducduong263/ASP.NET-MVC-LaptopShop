@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace DAPM.Areas.Admin
+namespace DoAnPhanMem.Areas.Admin
 {
     public class AdminAreaRegistration : AreaRegistration 
     {
