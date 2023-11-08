@@ -28,9 +28,10 @@ namespace DoAnPhanMem.Models
         public int acc_id { get; set; }
         public string status { get; set; }
         public string order_note { get; set; }
-        public Nullable<int> orderAddressId { get; set; }
         public string oder_address { get; set; }
         public string note { get; set; }
+        public string oderUsername { get; set; }
+        public Nullable<int> oderPhone { get; set; }
     
         public virtual Account Account { get; set; }
         public virtual Delivery Delivery { get; set; }

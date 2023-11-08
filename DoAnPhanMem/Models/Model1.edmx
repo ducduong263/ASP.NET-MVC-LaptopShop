@@ -118,6 +118,8 @@
           <Property Name="order_note" Type="nvarchar" MaxLength="200" />
           <Property Name="oder_address" Type="nvarchar" MaxLength="200" />
           <Property Name="note" Type="nvarchar" MaxLength="500" />
+          <Property Name="oderUsername" Type="nvarchar" MaxLength="50" />
+          <Property Name="oderPhone" Type="int" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -587,13 +589,14 @@
           <Property Name="acc_id" Type="Int32" Nullable="false" />
           <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="order_note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="orderAddressId" Type="Int32" />
           <NavigationProperty Name="Account" Relationship="Self.FK_Order_Account" FromRole="Order" ToRole="Account" />
           <NavigationProperty Name="Delivery" Relationship="Self.FK_Order_Delivery" FromRole="Order" ToRole="Delivery" />
           <NavigationProperty Name="Oder_Detail" Relationship="Self.FK_Oder_Detail_Order" FromRole="Order" ToRole="Oder_Detail" />
           <NavigationProperty Name="Payment" Relationship="Self.FK_Order_Payment" FromRole="Order" ToRole="Payment" />
           <Property Name="oder_address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="note" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="oderUsername" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="oderPhone" Type="Int32" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -1056,6 +1059,8 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="WebshopModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="oderPhone" ColumnName="oderPhone" />
+                <ScalarProperty Name="oderUsername" ColumnName="oderUsername" />
                 <ScalarProperty Name="note" ColumnName="note" />
                 <ScalarProperty Name="oder_address" ColumnName="oder_address" />
                 <ScalarProperty Name="order_id" ColumnName="order_id" />

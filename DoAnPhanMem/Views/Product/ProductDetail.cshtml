@@ -112,9 +112,12 @@
                         <nav aria-label="breadcrumb">
                             <ul>
                                 <li><a href="index.html">Trang Chủ</a></li>
-                                <a href="@Url.Action("Index","Product")">
-                                    Sản phẩm
-                                </a>
+                                <li>
+                                    <a href="@Url.Action("Index","Product")">
+                                        Sản phẩm
+                                    </a>
+                                </li>
+                                
                                 <li class="active" aria-current="page">
                                     Chi tiết sản phẩm
                                 </li>
@@ -196,19 +199,6 @@
                         {
                             <div class="price" style="color: #d0021c; font-weight: 600;">@Model.price.ToString("#,0₫", culture.NumberFormat)</div>
                         }
-                        @*<div>
-                                <div style="font-weight:600;">
-                                    Khuyến mãi liên quan
-                                </div>
-                                <ul style="list-style: inside;">
-                                    <li class="ml-sm-3">
-                                        Nhập mã <strong>KAOME300</strong>  giảm thêm 3% tối đa 300.000đ khi thanh toán qua VNPAY-QR.<a href="#" style="color: #024dbc; font-weight: 500;"> Xem chi tiết</a>
-                                    </li>
-                                    <li class="ml-sm-3">
-                                        Nhập mã <strong>KAOME3800</strong> giảm thêm 4% tối đa 800.000đ. Áp dụng cho một số sản phẩm Apple trên 20.000.000đ khi thanh toán qua VNPAY-QR.<a href="#" style="color: #024dbc; font-weight:500;"> Xem chi tiết</a>
-                                    </li>
-                                </ul>
-                            </div>*@
                     </div>
                     <!-- End  Product Details Text Area-->
                     <!-- Start Product Variable Area -->
@@ -238,8 +228,9 @@
                                     <div class="d-flex" style="gap:7px;">
                                         @Html.Hidden("productId", Model.pro_id)
                                         @Html.Hidden("quantity", 1)
+
                                         <div class="product-add-to-cart-btn d-flex">
-                                            <button type="submit" style="user-select: none !important;"
+                                            <button type="submit" style="user-select: none !important;" name="action" value="buynow"
                                                     class="btn btn-block btn-lg btn-black-default-hover">
                                                 Mua ngay
                                             </button>
@@ -247,7 +238,8 @@
                                         @Html.Hidden("productId", Model.pro_id)
                                         @Html.Hidden("quantity", quantity)
                                         <div class="product-add-to-cart-btn d-flex">
-                                            <button type="submit" style="user-select: none !important; border-color: #FE8C23; color: #FE8C23;background:#fff;"
+                                            <button id="btnAddToCart" type="submit" style="user-select: none !important; border-color: #FE8C23; color: #FE8C23;background:#fff;"
+                                                    name="action" value="addtocart"
                                                     class="btn btn-block btn-lg btn-black-default-hover">
                                                 Thêm vào giỏ
                                             </button>
@@ -268,6 +260,7 @@
                                     </div>
                                 }
                             }
+
                         </div>
                         <!-- Start  Product Details Meta Area-->
                         <!-- End  Product Details Meta Area-->

@@ -211,6 +211,70 @@ namespace DoAnPhanMem.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
+        //Lịch sử mua hàng
+        public ActionResult TrackingOrder(int? page)
+        {
+            var user = Session["TaiKhoan"] as Account;
+            if (user != null)
+            {
+                return View("TrackingOrder", GetOrder(page));
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        //Chi tiết đơn hàng đã mua
+        public ActionResult TrackingOrderDetail(int id)
+        {
+            var user = Session["TaiKhoan"] as Account;
+            List<Oder_Detail> order = db.Oder_Detail.Where(m => m.oder_id == id).ToList();
+            ViewBag.Order = db.Orders.FirstOrDefault(m => m.order_id == id);
+
+            ViewBag.Shipfee = db.Deliveries.FirstOrDefault(m => m.delivery_id == db.Orders.FirstOrDefault(p => p.order_id == id).delivery_id).price;
+
+            ViewBag.OrderID = id;
+            if (user != null)
+            {
+                return View(order);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        public ActionResult CancelOrder(int OrderId)
+        {
+            bool result = false;
+            try
+            {
+                Order order = db.Orders.FirstOrDefault(o => o.order_id == OrderId);
+
+                if (order != null)
+                {
+                    order.status = "4";
+                    db.SaveChanges();
+                    result = true;
+                }
+            }
+            catch
+            {
+                result = false;
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        //đánh số trang
+        private IPagedList GetOrder(int? page)
+        {
+            var user = Session["TaiKhoan"] as Account;
+            int pageSize = 10;
+            int pageNumber = (page ?? 1); //đánh số trang
+            var list = db.Orders.Where(m => m.acc_id == user.acc_id).OrderByDescending(m => m.order_id)
+                .ToPagedList(pageNumber, pageSize);
+            return list;
+        }
+
 
     }
 }

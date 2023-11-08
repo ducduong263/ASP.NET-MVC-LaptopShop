@@ -39,7 +39,7 @@ namespace DoAnPhanMem.Controllers
             ViewBag.Discount = discount;
             return View(listProduct);
         }
-        public ActionResult AddToCart(int productId, int quantity)
+        public ActionResult AddToCart(int productId, int quantity,string action)
         {
             var cart = Session["Cart"] as List<CartModel>;
             if (cart == null)
@@ -70,7 +70,14 @@ namespace DoAnPhanMem.Controllers
                 }
             }
             Session["Cart"] = cart;
-            return RedirectToAction("Index");
+            if(action == "addtocart" || action == "AddToCart")
+            {
+                string returnUrl = Request.UrlReferrer.ToString();
+                Notification.setNotification1_5s("Thêm vào giỏ hàng thành công", "success");
+                return Redirect(returnUrl);
+
+            }
+            return RedirectToAction("ViewCart");
         }
         private Tuple<List<Product>, List<int>> GetCart()
         {
@@ -150,6 +157,9 @@ namespace DoAnPhanMem.Controllers
         //}
         public ActionResult Checkout()
         {
+            var listDeliveryMethods = db.Deliveries.ToList();
+            ViewBag.ListDeli = listDeliveryMethods;
+            ViewBag.ShippingFee = 30000;
             var TK = Session["TaiKhoan"] as Account;
             if (TK == null)
             {
@@ -158,7 +168,7 @@ namespace DoAnPhanMem.Controllers
 
             }
             int userId = TK.acc_id;
-            var user = db.Accounts.SingleOrDefault(u => u.acc_id == userId);
+            Account user = db.Accounts.SingleOrDefault(u => u.acc_id == userId);
             var cart = this.GetCart();
             ViewBag.Quans = cart.Item2;
             ViewBag.ListProduct = cart.Item1.ToList();
@@ -224,90 +234,89 @@ namespace DoAnPhanMem.Controllers
             ViewBag.Count = cart.Item1.Count();
             return PartialView();
         }
-        public ActionResult SaveOrder(string note, string oder_address)
+        public ActionResult SaveOrder(string note, string address, string acc_name, int phone)
         {
+            int deliveryId = Convert.ToInt32(Request.Form["delivery_id"]);
             var TK = Session["TaiKhoan"] as Account;
-            try
+
+            var culture = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+            double priceSum = 0;
+            int productquancheck = 0;
+            if (Session["Discount"] != null && Session["Discountcode"] != null)
             {
-                var culture = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
-                double priceSum = 0;
+                string check_discount = Session["Discountcode"].ToString();
+                var discountupdatequan = db.Discounts.Where(d => d.discount_code == check_discount).SingleOrDefault();
+                int newquantity = (discountupdatequan.quantity - 1);
+                discountupdatequan.quantity = newquantity;
+            }
+            double priDeli = db.Deliveries.FirstOrDefault(m => m.delivery_id == deliveryId).price;
+            priceSum = PriceSum();
+            var cart = this.GetCart();
+            var listProduct = new List<Product>();
+            var order = new Order()
+            {
+                acc_id = TK.acc_id,
+                oder_date = DateTime.Now,
+                status = "1",
+                order_note = Request.Form["OrderNote"].ToString(),
+                delivery_id = deliveryId,
+                oder_address = address,
+                payment_id = 1,
+                total = priceSum  + priDeli,
+                note = note,
+                oderUsername = acc_name,
+                oderPhone = phone
+            };
 
-                int productquancheck = 0;
-                if (Session["Discount"] != null && Session["Discountcode"] != null)
+            for (int i = 0; i < cart.Item1.Count; i++)
+            {
+                var item = cart.Item1[i];
+                var _price = item.price;
+                if (item.Discount != null)
                 {
-                    string check_discount = Session["Discountcode"].ToString();
-                    var discountupdatequan = db.Discounts.Where(d => d.discount_code == check_discount).SingleOrDefault();
-                    int newquantity = (discountupdatequan.quantity - 1);
-                    discountupdatequan.quantity = newquantity;
-                }
-                var cart = this.GetCart();
-                var listProduct = new List<Product>();
-                var order = new Order()
-                {
-                    acc_id = TK.acc_id,
-                    oder_date = DateTime.Now,
-                    status = "1",
-                    order_note = Request.Form["OrderNote"].ToString(),
-                    delivery_id = 1,
-                    oder_address = oder_address,
-                    payment_id = 1,
-                    total = Convert.ToDouble(TempData["Total"]),
-                    note = note
-                };
-
-                for (int i = 0; i < cart.Item1.Count; i++)
-                {
-                    var item = cart.Item1[i];
-                    var _price = item.price;
-                    if (item.Discount != null)
+                    if (item.Discount.discount_start < DateTime.Now && item.Discount.discount_end > DateTime.Now)
                     {
-                        if (item.Discount.discount_start < DateTime.Now && item.Discount.discount_end > DateTime.Now)
-                        {
-                            _price = item.price - item.Discount.discount_price;
-                        }
+                        _price = item.price - item.Discount.discount_price;
                     }
-                    order.Oder_Detail.Add(new Oder_Detail
-                    {
-                        pro_id = item.pro_id,
-                        discount_id = item.discount_id,
-                        cate_id = item.cate_id,
-                        price = _price,
-                        quantity = cart.Item2[i],
-                        status = "1",
-                    });
-                    //xóa giỏ hàng
-                    Session["Cart"] = null;
+                }
+                order.Oder_Detail.Add(new Oder_Detail
+                {
+                    pro_id = item.pro_id,
+                    discount_id = item.discount_id,
+                    cate_id = item.cate_id,
+                    price = _price,
+                    quantity = cart.Item2[i],
+                    status = "1",
+                });
+                //xóa giỏ hàng
+                Session["Cart"] = null;
 
-                    // Thay đổi số lượng và số lượt mua của product 
-                    var product = db.Products.SingleOrDefault(p => p.pro_id == item.pro_id);
-                    productquancheck = product.quantity;
-                    product.buyturn += cart.Item2[i];
-                    product.quantity = product.quantity - cart.Item2[i];
-                    listProduct.Add(product);
-                    priceSum += (_price * cart.Item2[i]);
-                }
-                //thêm dữ liệu vào table
-                if (productquancheck ==  0)
-                {
-                    db.Orders.Add(order);
-                }
-                else
-                {
-                    Notification.setNotification3s("Sản phẩm đã hết hàng", "error");
-                    return RedirectToAction("ViewCart", "Cart");
-                }
-                db.Configuration.ValidateOnSaveEnabled = false;
-                db.SaveChangesAsync();
-                Session.Remove("Discount");
-                Session.Remove("Discountcode");
-                Notification.setNotification3s("Đặt hàng thành công", "success");
-                return RedirectToAction("Index", "Home");
+                // Thay đổi số lượng và số lượt mua của product 
+                var product = db.Products.SingleOrDefault(p => p.pro_id == item.pro_id);
+                productquancheck = product.quantity;
+                product.buyturn += cart.Item2[i];
+                product.quantity = product.quantity - cart.Item2[i];
+
+                listProduct.Add(product);
+                priceSum += (_price * cart.Item2[i]);
             }
-            catch
+            //thêm dữ liệu vào table
+            if (productquancheck != 0)
             {
-                Notification.setNotification3s("Lỗi! đặt hàng không thành công", "error");
-                return RedirectToAction("Checkout", "Cart");
+                db.Orders.Add(order);
             }
+            else
+            {
+                Notification.setNotification3s("Sản phẩm đã hết hàng", "error");
+                return RedirectToAction("ViewCart", "Cart");
+            }
+            db.Configuration.ValidateOnSaveEnabled = false;
+            db.SaveChanges();
+            Session.Remove("Discount");
+            Session.Remove("Discountcode");
+            Notification.setNotification3s("Đặt hàng thành công", "success");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
+    

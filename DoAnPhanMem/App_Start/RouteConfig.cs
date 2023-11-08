@@ -36,13 +36,18 @@ namespace DoAnPhanMem
              defaults: new { Controller = "Product", action = "Index" }
            );
 
-            //rút gọn link phụ kiện
+           //rút gọn link category và brand
             routes.MapRoute(
-              name: "phu kien",
-              url: "accessory",
-             defaults: new { Controller = "Product", action = "Accessories" }
-           );
+             name: "Category",
+             url: "category",
+            defaults: new { Controller = "Product", action = "ProductsByCategory" }
+          );
 
+            routes.MapRoute(
+             name: "Brand",
+             url: "brand",
+            defaults: new { Controller = "Product", action = "ProductsByBrand" }
+          );
             //rút gọn link giỏ hàng
             routes.MapRoute(
                name: "Thanh toan",

@@ -19,8 +19,9 @@
             <div class="hero-single-slider-item swiper-slide">
                 <!-- Hero Slider Image -->
                 <div class="hero-slider-bg">
-                    <img src="https://lh3.googleusercontent.com/xTnCL7cNQFHweGLUNTC5jSnnT0NRHvI7MgavTiLvaHmVeYkgjb2wl80Lszl4E20QRTcxRGhXQI2vFtMx9Hy0cut_kIXIkv52=rw-w1920"
-                         alt="image" />
+                    <img src="~/Images/logo/maxresdefault.jpg" alt="image" /> 
+                  @*  <img src="https://lh3.googleusercontent.com/xTnCL7cNQFHweGLUNTC5jSnnT0NRHvI7MgavTiLvaHmVeYkgjb2wl80Lszl4E20QRTcxRGhXQI2vFtMx9Hy0cut_kIXIkv52=rw-w1920"*@
+                        
                 </div>
                 <!-- Hero Slider Content -->
                 <div class="hero-slider-wrapper">
@@ -98,7 +99,8 @@
                                             <div class="action-link">
                                                 <div class="action-link-left">
                                                     <input step="1" id="quantity" autocomplete="off" hidden value="1" type="number" />
-                                                    <a class="btnAddToCart" style="cursor:pointer;" data-id="@item.pro_id">Thêm vào giỏ</a>
+                                                    <a href="@Url.Action("AddToCart", "Cart", new { productId = @item.pro_id, quantity = 1, action = "addtocartfromhome" })" style="cursor:pointer;">Thêm vào giỏ hàng</a>
+
                                                 </div>
                                                 <div class="action-link-right">
                                                     <a href="#"
@@ -106,10 +108,10 @@
                                                        data-bs-target="#modalQuickview">
                                                         <i class="icon-magnifier"></i>
                                                     </a>
-                                                    <a >
+                                                    <a>
                                                         <i class="icon-heart"></i>
                                                     </a>
-                                                    <a >
+                                                    <a>
                                                         <i class="icon-shuffle"></i>
                                                     </a>
                                                 </div>
@@ -286,7 +288,8 @@
                                             <div class="action-link">
                                                 <div class="action-link-left">
                                                     <input step="1" id="quantity" autocomplete="off" hidden value="1" type="number" />
-                                                    <a class="btnAddToCart" style="cursor:pointer;" data-id="@item.pro_id">Thêm vào giỏ</a>
+                                                    <a href="@Url.Action("AddToCart", "Cart", new { productId = @item.pro_id, quantity = 1, action = "addtocartfromhome" })" style="cursor:pointer;">Thêm vào giỏ hàng</a>
+
                                                 </div>
                                                 <div class="action-link-right">
                                                     <a href="#"
@@ -427,7 +430,6 @@
     <!-- Start Section Content Text Area -->
 </div>
 <!--end::Host Product-->
-
 <!-- Start Service Section -->
 <div class="service-promo-section section-top-gap-100">
     <div class="service-wrapper">
