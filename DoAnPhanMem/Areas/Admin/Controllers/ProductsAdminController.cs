@@ -6,16 +6,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using DAPM.Common.Helpers;
-using DAPM.DTOs;
-using DAPM.Models;
+using DoAnPhanMem;
+using DoAnPhanMem.Areas.Admin.Controllers;
+using DoAnPhanMem.Common.Helpers;
+using DoAnPhanMem.DTOs;
+using DoAnPhanMem.Models;
 using PagedList;
 
-namespace DAPM.Areas.Admin.Controllers
+namespace DoAnPhanMem.Areas.Admin.Controllers
 {
-    public class ProductsAdminController : BaseController
+    public class ProductsAdminController : Controller
     {
-        private readonly Model1 db = new Model1();
+        private WebshopEntities db = new WebshopEntities();
 
         // GET: Admin/ProductsAdmin
         public ActionResult Index(string search, int? size, int? page) // hiển thị tất cả sp online
@@ -23,60 +25,26 @@ namespace DAPM.Areas.Admin.Controllers
             var pageSize = size ?? 15;
             var pageNumber = page ?? 1;
             ViewBag.search = search;
-            ViewBag.countTrash = db.Products.Where(a => a.status == "0").Count(); //  đếm tổng sp có trong thùng rác
+            ViewBag.countTrash = db.Products.Where(a => a.status_ == "0").Count(); //  đếm tổng sp có trong thùng rác
             var list = from a in db.Products
-                join c in db.Genres on a.genre_id equals c.genre_id
-                join d in db.Brands on a.brand_id equals d.brand_id
-                join e in db.Discounts on a.disscount_id equals e.disscount_id
-                where a.status == "1"
-                orderby a.create_at descending // giảm dần
-                select new ProductDTOs
-                {
-                    discount_start = (DateTime)e.discount_star,
-                    discount_end = (DateTime)e.discount_end,
-                    discount_name = e.discount_name,
-                    discount_price = e.discount_price,
-                    product_name = a.product_name,
-                    quantity = a.quantity,
-                    price = a.price,
-                    Image = a.image,
-                    genre_name = c.genre_name,
-                    view = a.view,
-                    brand_name = d.brand_name,
-                    product_id = a.product_id
-                };
-            if (!string.IsNullOrEmpty(search))
-            {
-                 list = list.Where(s => s.product_name.Contains(search) || s.product_id.ToString().Contains(search));
-            }
-            return View(list.ToPagedList(pageNumber, pageSize));
-        }
-
-        public ActionResult Trash(string search, int? size, int? page) // hiển thị tất cả sp online
-        {
-            var pageSize = size ?? 15;
-            var pageNumber = page ?? 1;
-            ViewBag.search = search;
-            var list = from a in db.Products
-                       join c in db.Genres on a.genre_id equals c.genre_id
+                       join c in db.Categories on a.cate_id equals c.cate_id
                        join d in db.Brands on a.brand_id equals d.brand_id
-                       join e in db.Discounts on a.disscount_id equals e.disscount_id
-                       where a.status == "0"
-                       orderby a.create_at descending // giảm dần
+                       join e in db.Discounts on a.discount_id equals e.discount_id
+                       where a.status_ == "1"
+                       orderby a.update_at descending // giảm dần
                        select new ProductDTOs
                        {
-                           discount_start = (DateTime)e.discount_star,
+                           discount_start = (DateTime)e.discount_start,
                            discount_end = (DateTime)e.discount_end,
                            discount_name = e.discount_name,
                            discount_price = e.discount_price,
-                           product_name = a.product_name,
+                           product_name = a.pro_name,
                            quantity = a.quantity,
                            price = a.price,
-                           Image = a.image,
-                           genre_name = c.genre_name,
-                           view = a.view,
+                           Image = a.pro_img,
+                           cate_name = c.cate_name,
                            brand_name = d.brand_name,
-                           product_id = a.product_id
+                           product_id = a.pro_id
                        };
             if (!string.IsNullOrEmpty(search))
             {
@@ -84,12 +52,11 @@ namespace DAPM.Areas.Admin.Controllers
             }
             return View(list.ToPagedList(pageNumber, pageSize));
         }
-
         // GET: Areas/ProductsAdmin/Details/5
 
         public ActionResult Details(int? id)
         {
-            Product product = db.Products.FirstOrDefault(m => m.product_id == id);
+            Product product = db.Products.FirstOrDefault(m => m.pro_id == id);
             if (product == null)
             {
                 Notification.setNotification1_5s("Không tồn tại! (ID = " + id + ")", "warning");
@@ -101,21 +68,22 @@ namespace DAPM.Areas.Admin.Controllers
         // GET: Areas/ProductsAdmin/Create
         public ActionResult Create() //Tạo sản phẩm
         {
-            ViewBag.ListDiscount = new SelectList(db.Discounts.OrderBy(m=>m.discount_price), "disscount_id", "discount_name", 0);
+            Product model = new Product();
+            ViewBag.ListDiscount = new SelectList(db.Discounts.OrderBy(m => m.discount_price), "discount_id", "discount_name", 0);
             ViewBag.ListBrand = new SelectList(db.Brands, "brand_id", "brand_name", 0);
-            ViewBag.ListGenre = new SelectList(db.Genres, "genre_id", "genre_name", 0);
-            return View();
+            ViewBag.ListGenre = new SelectList(db.Categories, "cate_id", "cate_name", 0);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Create(Product product,ProductImage productImage)
+        public ActionResult Create(Product product)
         {
             ViewBag.ListDiscount =
-                new SelectList(db.Discounts.OrderBy(m => m.discount_price), "disscount_id", "discount_name", 0);
+                new SelectList(db.Discounts.OrderBy(m => m.discount_price), "discount_id", "discount_name", 0);
             ViewBag.ListBrand = new SelectList(db.Brands, "brand_id", "brand_name", 0);
-            ViewBag.ListGenre = new SelectList(db.Genres, "genre_id", "genre_name", 0);
+            ViewBag.ListGenre = new SelectList(db.Categories, "cate_id", "cate_name", 0);
             try
             {
                 if (product.ImageUpload != null)
@@ -123,7 +91,7 @@ namespace DAPM.Areas.Admin.Controllers
                     var fileName = Path.GetFileNameWithoutExtension(product.ImageUpload.FileName);
                     var extension = Path.GetExtension(product.ImageUpload.FileName);
                     fileName = fileName + DateTime.Now.ToString("HH-mm-dd-MM-yyyy") + extension;
-                    product.image = "/Content/Images/" + fileName;
+                    product.pro_img = "/Content/Images/" + fileName;
                     product.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/"), fileName));
                 }
                 else
@@ -131,34 +99,14 @@ namespace DAPM.Areas.Admin.Controllers
                     Notification.setNotification3s("Vui lòng thêm Ảnh Thumbnail!", "error");
                     return View(product);
                 }
-                product.status = "1";
-                product.view = 0;
+                product.status_ = "1";
                 product.buyturn = 0;
-                product.Type = product.Type;
-                product.specifications = product.specifications;
-                product.description = product.description;
-                product.create_at = DateTime.Now;
-                product.create_by = User.Identity.GetUserId().ToString();
+                product.specification = product.specification;
+                product.pro_description = product.pro_description;
+                product.cate_id = product.cate_id;
                 product.update_at = DateTime.Now;
-                product.update_by = User.Identity.GetUserId().ToString();
                 db.Products.Add(product);
                 db.SaveChanges();
-                foreach (HttpPostedFileBase image_multi in product.ImageUploadMulti)
-                {
-                    if (image_multi != null)
-                    {
-                        var fileName = Path.GetFileNameWithoutExtension(image_multi.FileName);
-                        var extension = Path.GetExtension(image_multi.FileName);
-                        fileName = fileName + DateTime.Now.ToString("HH-mm-dd-MM-yyyy") + extension;
-                        productImage.image = "/Content/Images/" + fileName;
-                        image_multi.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/"), fileName));
-                        productImage.product_id = product.product_id;
-                        productImage.disscount_id = product.disscount_id;
-                        productImage.genre_id = product.genre_id;
-                        db.ProductImages.Add(productImage);
-                        db.SaveChanges();
-                    }
-                }
                 Notification.setNotification1_5s("Thêm mới thành công!", "success");
                 return RedirectToAction("Index");
             }
@@ -172,10 +120,10 @@ namespace DAPM.Areas.Admin.Controllers
         // GET: Areas/ProductsAdmin/Edit/5
         public ActionResult Edit(int? id)
         {
-            ViewBag.ListDiscount = new SelectList(db.Discounts.OrderBy(m => m.discount_price), "disscount_id", "discount_name", 0);
+            ViewBag.ListDiscount = new SelectList(db.Discounts.OrderBy(m => m.discount_price), "discount_id", "discount_name", 0);
             ViewBag.ListBrand = new SelectList(db.Brands, "brand_id", "brand_name", 0);
-            ViewBag.ListGenre = new SelectList(db.Genres, "genre_id", "genre_name", 0);
-            var product = db.Products.FirstOrDefault(x => x.product_id == id);
+            ViewBag.ListGenre = new SelectList(db.Categories, "cate_id", "cate_name", 0);
+            var product = db.Products.FirstOrDefault(x => x.pro_id == id);
             if (product == null || id == null)
             {
                 Notification.setNotification1_5s("Không tồn tại! (ID = " + id + ")", "warning");
@@ -188,12 +136,12 @@ namespace DAPM.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit(Product model, ProductImage productImage)
+        public ActionResult Edit(Product model, ProductImg productImage)
         {
-            ViewBag.ListDiscount = new SelectList(db.Discounts.OrderBy(m => m.discount_price), "disscount_id", "discount_name", 0);
+            ViewBag.ListDiscount = new SelectList(db.Discounts.OrderBy(m => m.discount_price), "discount_id", "discount_name", 0);
             ViewBag.ListBrand = new SelectList(db.Brands, "brand_id", "brand_name", 0);
-            ViewBag.ListGenre = new SelectList(db.Genres, "genre_id", "genre_name", 0);
-            var product = db.Products.SingleOrDefault(x => x.product_id == model.product_id);
+            ViewBag.ListGenre = new SelectList(db.Categories, "cate_id", "cate_name", 0);
+            var product = db.Products.SingleOrDefault(x => x.pro_id == model.pro_id);
             try
             {
                 if (model.ImageUpload != null)
@@ -201,18 +149,17 @@ namespace DAPM.Areas.Admin.Controllers
                     var fileName = Path.GetFileNameWithoutExtension(model.ImageUpload.FileName);
                     var extension = Path.GetExtension(model.ImageUpload.FileName);
                     fileName = fileName + extension;
-                    product.image = "/Content/Images/" + fileName;
+                    product.pro_img = "/Content/Images/" + fileName;
                     model.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/"), fileName));
                 }
-                product.product_name = model.product_name;
+                product.pro_name = model.pro_name;
                 product.quantity = model.quantity;
-                product.description = model.description;
-                product.specifications = model.specifications;
+                product.pro_description = model.pro_description;
+                product.specification = model.specification;
                 product.price = model.price;
                 product.brand_id = model.brand_id;
-                product.Type = model.Type;
+                product.cate_id = model.cate_id;
                 product.update_at = DateTime.Now;
-                product.update_by = User.Identity.GetUsername();
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 Notification.setNotification1_5s("Đã cập nhật lại thông tin!", "success");
@@ -227,11 +174,11 @@ namespace DAPM.Areas.Admin.Controllers
         public JsonResult Disable(int id)
         {
             string result = "error";
-            Product product = db.Products.FirstOrDefault(m=>m.product_id ==id);
+            Product product = db.Products.FirstOrDefault(m => m.pro_id == id);
             try
             {
                 result = "disabled";
-                product.status = "0";
+                product.status_ = "0";
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -245,11 +192,11 @@ namespace DAPM.Areas.Admin.Controllers
         public ActionResult Undo(int id)
         {
             string result = "error";
-            Product product = db.Products.FirstOrDefault(m => m.product_id == id);
+            Product product = db.Products.FirstOrDefault(m => m.pro_id == id);
             try
             {
                 result = "activate";
-                product.status = "1";
+                product.status_ = "1";
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -263,13 +210,13 @@ namespace DAPM.Areas.Admin.Controllers
         public JsonResult Delete(int id)
         {
             string result = "error";
-            Product product = db.Products.FirstOrDefault(m => m.product_id == id);
+            Product product = db.Products.FirstOrDefault(m => m.pro_id == id);
             try
             {
-                List<ProductImage> listImage = db.ProductImages.Where(m => m.product_id == id).ToList();
-                foreach(var item in listImage)
+                List<ProductImg> listImage = db.ProductImgs.Where(m => m.product_id == id).ToList();
+                foreach (var item in listImage)
                 {
-                    db.ProductImages.Remove(item);
+                    db.ProductImgs.Remove(item);
                     db.SaveChanges();
                 }
                 result = "delete";
@@ -282,7 +229,37 @@ namespace DAPM.Areas.Admin.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
-
+        public ActionResult Trash(string search, int? size, int? page) // hiển thị tất cả sp online
+        {
+            var pageSize = size ?? 15;
+            var pageNumber = page ?? 1;
+            ViewBag.search = search;
+            var list = from a in db.Products
+                       join c in db.Categories on a.cate_id equals c.cate_id
+                       join d in db.Brands on a.brand_id equals d.brand_id
+                       join e in db.Discounts on a.discount_id equals e.discount_id
+                       where a.status_ == "0"
+                       orderby a.update_at descending // giảm dần
+                       select new ProductDTOs
+                       {
+                           discount_start = (DateTime)e.discount_start,
+                           discount_end = (DateTime)e.discount_end,
+                           discount_name = e.discount_name,
+                           discount_price = e.discount_price,
+                           product_name = a.pro_name,
+                           quantity = a.quantity,
+                           price = a.price,
+                           Image = a.pro_img,
+                           cate_name = c.cate_name,
+                           brand_name = d.brand_name,
+                           product_id = a.pro_id
+                       };
+            if (!string.IsNullOrEmpty(search))
+            {
+                list = list.Where(s => s.product_name.Contains(search) || s.product_id.ToString().Contains(search));
+            }
+            return View(list.ToPagedList(pageNumber, pageSize));
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing) db.Dispose();

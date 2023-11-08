@@ -11,7 +11,9 @@ namespace DoAnPhanMem.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Web;
+
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -45,5 +47,11 @@ namespace DoAnPhanMem.Models
         public virtual ICollection<Oder_Detail> Oder_Detail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductImg> ProductImgs { get; set; }
+        public HttpPostedFileBase ImageUpload { get; set; }
+
+
+        //[ValidateFile(ErrorMessage = "Please select a PNG image smaller than 1MB")]
+        [NotMapped]
+        public HttpPostedFileBase[] ImageUploadMulti { get; set; }
     }
 }

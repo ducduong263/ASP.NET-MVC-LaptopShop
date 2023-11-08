@@ -1,4 +1,4 @@
-﻿namespace DAPM.Common
+﻿namespace DoAnPhanMem.Common
 {
     public class Pagination
     {

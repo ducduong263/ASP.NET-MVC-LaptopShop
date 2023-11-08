@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace DAPM.Common
+namespace DoAnPhanMem.Common
 {
 
     public class Const

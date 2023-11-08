@@ -7,9 +7,9 @@ using System.Web.Mvc;
 
 namespace DoAnPhanMem.Areas.Admin.Controllers
 {
-    public class DashBoardsController : BaseController
+    public class DashBoardsController : Controller
     {
-        private  WebshopEntities db = new WebshopEntities();
+        private WebshopEntities db = new WebshopEntities();
         // GET: Admin/DashBoards
         public ActionResult Index()
         {

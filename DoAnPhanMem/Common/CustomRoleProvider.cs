@@ -1,4 +1,4 @@
-﻿using DAPM.Common;
+﻿using DoAnPhanMem.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 
-namespace DAPM.Common
+namespace DoAnPhanMem.Common
 {
 	public class CustomRoleProvider : RoleProvider
 	{

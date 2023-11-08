@@ -139,14 +139,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\AuthController.cs" />
     <Compile Include="Areas\Admin\Controllers\BaseController.cs" />
-    <Compile Include="Areas\Admin\Controllers\BrandsController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashBoardsController.cs" />
-    <Compile Include="Areas\Admin\Controllers\DiscountsController.cs" />
-    <Compile Include="Areas\Admin\Controllers\FeedbacksController.cs" />
-    <Compile Include="Areas\Admin\Controllers\GenresController.cs" />
-    <Compile Include="Areas\Admin\Controllers\OrdersController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductsAdminController.cs" />
     <Compile Include="Common\Const.cs" />
     <Compile Include="Common\CustomRoleProvider.cs" />
@@ -161,6 +155,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="DTOs\ProductDTOs.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2403,27 +2398,17 @@
     <Content Include="Content\fonts\simple-line-icon-fonts\Simple-Line-Iconsb26c.woff2" />
     <Content Include="Content\Images\Untitled-1.pdf" />
     <Content Include="Images\Admin\assets\media\svg\shapes.zip" />
-    <Content Include="Areas\Admin\Views\Auth\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\Auth\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Auth\Trash.cshtml" />
-    <Content Include="Areas\Admin\Views\Brands\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\DashBoards\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Discounts\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Feedbacks\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Genres\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Orders\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\Orders\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Orders\Trash.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductsAdmin\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductsAdmin\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductsAdmin\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductsAdmin\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ProductsAdmin\Trash.cshtml" />
+    <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\Shared\_FooterLayout.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_HeaderLayout.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MainLayout.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessageAlert.cshtml" />
-    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\DashBoards\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductsAdmin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductsAdmin\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductsAdmin\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductsAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\ProductsAdmin\Trash.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\custom-notifi.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
@@ -2526,6 +2511,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

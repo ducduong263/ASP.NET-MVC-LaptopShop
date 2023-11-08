@@ -1,4 +1,4 @@
-﻿@model DAPM.Models.Product
+﻿@model DoAnPhanMem.Models.Product
 @{
     ViewBag.Title = "Chỉnh sửa sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_MainLayout.cshtml";
@@ -79,7 +79,7 @@
                             <!--begin: Pic-->
                             <div class="me-7 mb-4">
                                 <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                                    <img src="@Model.image" alt="@Model.image" style="object-fit:cover;">
+                                    <img src="@Model.pro_img" alt="@Model.pro_img" style="object-fit:cover;">
                                 </div>
                             </div>
                             <!--end::Pic-->
@@ -91,45 +91,13 @@
                                     <div class="d-flex flex-column">
                                         <!--begin::Name-->
                                         <div class="d-flex align-items-center mb-2">
-                                            <a href="#" class="text-gray-900 text-hover-primary fs-2 fw-bolder me-1">@Model.product_name</a>
+                                            <a href="#" class="text-gray-900 text-hover-primary fs-2 fw-bolder me-1">@Model.pro_name</a>
                                         </div>
                                         <!--end::Name-->
                                     </div>
                                     <!--end::User-->
                                 </div>
                                 <!--end::Title-->
-                                <!--begin::Stats-->
-                                <div class="d-flex flex-wrap flex-stack">
-                                    <!--begin::Wrapper-->
-                                    <div class="d-flex flex-column flex-grow-1 pe-8">
-                                        <!--begin::Stats-->
-                                        <div class="d-flex flex-wrap">
-                                            <!--begin::Stat-->
-                                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
-                                                <!--begin::Number-->
-                                                <div class="d-flex align-items-center">
-                                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-                                                    <span class="svg-icon svg-icon-3 svg-icon-success me-2">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                            <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black"></rect>
-                                                            <path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="black"></path>
-                                                        </svg>
-                                                    </span>
-                                                    <!--end::Svg Icon-->
-                                                    <div class="fs-2 fw-bolder counted" data-kt-countup="true" data-kt-countup-value="4500" data-kt-countup-prefix="$">@Model.view</div>
-                                                </div>
-                                                <!--end::Number-->
-                                                <!--begin::Label-->
-                                                <div class="fw-bold fs-6 text-gray-400">Lượt xem</div>
-                                                <!--end::Label-->
-                                            </div>
-                                            <!--end::Stat-->
-                                        </div>
-                                        <!--end::Stats-->
-                                    </div>
-                                    <!--end::Wrapper-->
-                                </div>
-                                <!--end::Stats-->
                             </div>
                             <!--end::Info-->
                         </div>
@@ -146,8 +114,8 @@
                             <!--begin::Card body-->
                             <div class="card-body border-top p-9">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                @Html.HiddenFor(model => model.product_id)
-                                @Html.HiddenFor(model => model.create_at)
+                                @Html.HiddenFor(model => model.pro_id)
+                                @Html.HiddenFor(model => model.update_at)
 
                                 <div class="mb-2">
                                     <span><i class="text-danger">Những mục đánh dấu (*) là bắt buộc </i></span>
@@ -158,7 +126,9 @@
                                         <label for="genre_id" class="col-form-label fw-bold fs-6">Danh mục</label>
                                     </div>
                                     <div class="col-lg-8 fv-row">
-                                        <div class="form-control form-control-lg form-control-solid disabled">@Model.Genre.genre_name</div>
+                                        @*  <div class="form-control form-control-lg form-control-solid disabled">@Model.Category.cate_name</div>*@
+                                        @Html.DropDownListFor(model => model.cate_id, (SelectList)ViewBag.ListGenre, "-- Chọn danh mục --", new { @class = "form-select form-select-solid form-select-lg fw-bold" })
+                                        @Html.ValidationMessageFor(model => model.cate_id, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <!--end::Input group-->
@@ -167,8 +137,12 @@
                                     <div class="col-lg-4">
                                         <label for="disscount_id" class="col-form-label fw-bold fs-6">Chương trình giảm giá</label>
                                     </div>
+                                    @*<div class="col-lg-8 fv-row">
+                                            <div class="form-control form-control-lg form-control-solid disabled">@Model.Discount.discount_name</div>
+                                        </div>*@
                                     <div class="col-lg-8 fv-row">
-                                        <div class="form-control form-control-lg form-control-solid disabled">@Model.Discount.discount_name</div>
+                                        @Html.DropDownListFor(model => model.discount_id, (SelectList)ViewBag.ListDiscount, "-- Chọn chương trình giảm giá --", new { @class = "form-select form-select-solid form-select-lg fw-bold" })
+                                        @Html.ValidationMessageFor(model => model.discount_id, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <!--end::Input group-->
@@ -187,29 +161,13 @@
                                 <div class="row mb-6">
                                     <!--begin::Label-->
                                     <div class="col-lg-4">
-                                        <label for="price" class="col-form-label fw-bold fs-6 required">Loại sản phẩm</label>
-                                    </div>
-                                    <!--end::Label-->
-                                    <!--begin::Col-->
-                                    <div class="col-lg-8 fv-row">
-                                        @Html.DropDownListFor(model => model.Type, new[] { new SelectListItem { Value = "1", Text = "Laptop" },
-                                                                              new SelectListItem { Value = "2", Text = "Phụ kiện" } }, new { @class = "form-select form-select-solid form-select-lg fw-bold" })
-                                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-                                    </div>
-                                    <!--end::Col-->
-                                </div>
-                                <!--end::Input group-->
-                                <!--begin::Input group-->
-                                <div class="row mb-6">
-                                    <!--begin::Label-->
-                                    <div class="col-lg-4">
                                         <label for="product_name" class="col-form-label fw-bold fs-6 required">Tên sản phẩm</label>
                                     </div>
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                        @Html.EditorFor(model => model.product_name, new { htmlAttributes = new { @class = "form-control form-control-lg form-control-solid", placeholder = "Nhập tên sản phẩm", autocomplete = "off" } })
-                                        @Html.ValidationMessageFor(model => model.product_name, "", new { @class = "text-danger" })
+                                        @Html.EditorFor(model => model.pro_name, new { htmlAttributes = new { @class = "form-control form-control-lg form-control-solid", placeholder = "Nhập tên sản phẩm", autocomplete = "off" } })
+                                        @Html.ValidationMessageFor(model => model.pro_name, "", new { @class = "text-danger" })
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -292,8 +250,8 @@
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                        <textarea id="editor1" name="specifications" class="form-control form-control-lg form-control-solid">@Model.specifications</textarea>
-                                        @Html.ValidationMessageFor(model => model.specifications, "", new { @class = "text-danger" })
+                                        <textarea id="editor1" name="specification" class="form-control form-control-lg form-control-solid">@Model.specification</textarea>
+                                        @Html.ValidationMessageFor(model => model.specification, "", new { @class = "text-danger" })
                                     </div>
                                     <!--end::Col-->
                                 </div>
@@ -307,8 +265,8 @@
                                     <!--end::Label-->
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
-                                        <textarea id="editor2" name="description" class="form-control form-control-lg form-control-solid">@Model.description</textarea>
-                                        @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                                        <textarea id="editor2" name="pro_description" class="form-control form-control-lg form-control-solid">@Model.pro_description</textarea>
+                                        @Html.ValidationMessageFor(model => model.pro_description, "", new { @class = "text-danger" })
                                     </div>
                                     <!--end::Col-->
                                 </div>

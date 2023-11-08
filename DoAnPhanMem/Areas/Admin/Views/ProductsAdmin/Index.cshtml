@@ -1,5 +1,5 @@
 ﻿@using PagedList.Mvc
-@model PagedList.IPagedList<DAPM.DTOs.ProductDTOs>
+@model PagedList.IPagedList<DoAnPhanMem.DTOs.ProductDTOs>
 @{
     ViewBag.Title = "Danh sách sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_MainLayout.cshtml";
@@ -120,7 +120,6 @@
                                     <th class="min-w-110px" tabindex="3" rowspan="1" colspan="1" style="width:110px;">Ảnh</th>
                                     <th class="min-w-110px" tabindex="4" rowspan="1" colspan="1" style="width:110px;">Thương hiệu</th>
                                     <th class="@*sorting*@ min-w-175px" tabindex="5" rowspan="1" colspan="1" style="width:175px;">Danh mục</th>
-                                    <th class="@*sorting*@ min-w-100px" tabindex="5" rowspan="1" colspan="1" style="width:80px;">Lượt Xem</th>
                                     <th class="min-w-130px" tabindex="6" rowspan="1" colspan="1" style="width:130px;">Giá bán</th>
                                     <th class="text-end min-w-100px sorting_disabled" rowspan="1" colspan="1" style="width: 130.25px;">Hành động</th>
                                 </tr>
@@ -140,8 +139,7 @@
                                             </a>
                                         </td>
                                         <td>@item.brand_name</td>
-                                        <td>@item.genre_name</td>
-                                        <td>@item.view</td>
+                                        <td>@item.cate_name</td>
                                         <td>
                                             @if (item.discount_start < DateTime.Now && item.discount_end > DateTime.Now)
                                             {
