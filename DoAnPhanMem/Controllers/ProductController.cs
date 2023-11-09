@@ -62,7 +62,7 @@ namespace DoAnPhanMem.Controllers
             ViewBag.ProductImage = db.ProductImgs.Where(item => item.product_id == id).ToList();
             ViewBag.ListFeedback = db.Feedbacks.Where(m => m.status == "2").ToList();
             ViewBag.ListReplyFeedback = db.ReplyFeedbacks.Where(m => m.status == "2").ToList();
-            ViewBag.CountFeedback = db.Feedbacks.Where(m => m.status == "2" && m.product_id == product.pro_id).Count();
+            ViewBag.CountFeedback = db.Feedbacks.Where(m => m.status == "2" && m.product_id == product.pro_id && m.replyfor == null).Count();
             ViewBag.OrderFeedback = db.Oder_Detail.ToList();
             var comments = db.Feedbacks.Where(m => m.product_id == product.pro_id && m.status == "2").OrderByDescending(m => m.create_at).ToList();
             ViewBag.PagerFeedback = comments.ToPagedList(currentPage, pageSize);
@@ -70,6 +70,7 @@ namespace DoAnPhanMem.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult ProductComment(Feedback comment, int productID, int rateStar, string commentContent)
         {
 
@@ -105,50 +106,36 @@ namespace DoAnPhanMem.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
+
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult ProductComment2(Feedback comment, int productID, int rateStar, string commentContent)
+        public JsonResult ReplyComment(Feedback comment, int productID, string reply_content, int id)
         {
-            string returnUrl = Request.UrlReferrer.ToString();
             var user = Session["TaiKhoan"] as Account;
-            //bool result = false;
+            bool result = false;
+
             if (user != null)
             {
                 int userID = user.acc_id;
                 comment.account_id = userID;
-                comment.rate_star = rateStar;
                 comment.product_id = productID;
-                comment.content = commentContent;
+                comment.content = reply_content;
+                comment.replyfor = id;
                 comment.status = "2";
                 comment.create_at = DateTime.Now;
-                db.Feedbacks.Add(comment);
-                db.SaveChanges();
-                //result = true;
-                Notification.setNotification3s("Bình luận thành công", "success");
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                Notification.setNotification3s("Chức năng này yêu cầu đăng nhập", "warning");
-                return Redirect(returnUrl);
-            }
-        }
-        [HttpPost]
-        [ValidateInput(false)]
-        public JsonResult ReplyComment(int id, string reply_content, ReplyFeedback reply)
-        {
-            bool result = false;
-            if (User.Identity.IsAuthenticated)
-            {
-                reply.feedback_id = id;
-                reply.account_id = User.Identity.GetUserId();
-                reply.content = reply_content;
-                reply.stastus = "2";
-                reply.create_at = DateTime.Now;
-                db.ReplyFeedbacks.Add(reply);
-                db.SaveChanges();
-                result = true;
-                Notification.setNotification3s("Phản hồi thành công", "success");
+                bool hasPurchased = db.Oder_Detail.Any(od => od.Order.acc_id == userID && od.pro_id == productID && od.Order.status == "3");
+                if (hasPurchased || user.role_id == 1)
+                {
+                    db.Feedbacks.Add(comment);
+                    db.SaveChanges();
+                    result = true;
+                    Notification.setNotification3s("Phản hồi thành công", "success");
+                }
+                else
+                {
+                    result = true;
+                    Notification.setNotification5s("Đánh giá chỉ được ghi nhận khi bạn đã sản phẩm này", "warning");
+                }
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             else

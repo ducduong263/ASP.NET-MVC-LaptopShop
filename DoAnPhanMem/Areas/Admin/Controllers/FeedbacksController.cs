@@ -32,21 +32,47 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         }
 
         //phản hồi bình luận
+        //[HttpPost]
+        //[ValidateInput(false)]
+        //public JsonResult ReplyComment(int id, string reply_content, ReplyFeedback reply)
+        //{
+        //    var user = Session["TaiKhoan"] as Account;
+        //    bool result = false;
+        //    if (user != null && user.role_id == 1)
+        //    {
+        //        reply.feedback_id = id;
+        //        reply.acc_id = user.acc_id;
+        //        reply.content = reply_content;
+        //        reply.status = "2";
+        //        reply.create_at = DateTime.Now;
+        //        db.ReplyFeedbacks.Add(reply);
+        //        db.SaveChanges();
+        //        result = true;
+        //        return Json(result, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else
+        //    {
+        //        return Json(result, JsonRequestBehavior.AllowGet);
+        //    }
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult ReplyComment(int id, string reply_content, ReplyFeedback reply)
+        public JsonResult ReplyComment(Feedback comment, int productID, string reply_content, int id)
         {
             var user = Session["TaiKhoan"] as Account;
             bool result = false;
             if (user != null && user.role_id == 1)
             {
-                reply.feedback_id = id;
-                reply.acc_id = user.acc_id;
-                reply.content = reply_content;
-                reply.status = "2";
-                reply.create_at = DateTime.Now;
-                db.ReplyFeedbacks.Add(reply);
+                int userID = user.acc_id;
+                comment.account_id = userID;
+                comment.product_id = productID;
+                comment.content = reply_content;
+                comment.replyfor = id;
+                comment.status = "2";
+                comment.create_at = DateTime.Now;
+
+                db.Feedbacks.Add(comment);
                 db.SaveChanges();
+
                 result = true;
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -54,6 +80,7 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
             {
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
+
         }
 
     }

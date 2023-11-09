@@ -83,11 +83,11 @@
           <Property Name="feedback_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="account_id" Type="int" Nullable="false" />
           <Property Name="product_id" Type="int" Nullable="false" />
-          <Property Name="rate_star" Type="int" Nullable="false" />
           <Property Name="status" Type="char" MaxLength="1" />
           <Property Name="content" Type="nvarchar(max)" />
           <Property Name="replyfor" Type="int" />
           <Property Name="create_at" Type="datetime" />
+          <Property Name="rate_star" Type="int" />
         </EntityType>
         <EntityType Name="Oder_Detail">
           <Key>
@@ -549,7 +549,7 @@
           <Property Name="feedback_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="account_id" Type="Int32" Nullable="false" />
           <Property Name="product_id" Type="Int32" Nullable="false" />
-          <Property Name="rate_star" Type="Int32" Nullable="false" />
+          <Property Name="rate_star" Type="Int32" />
           <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="replyfor" Type="Int32" />

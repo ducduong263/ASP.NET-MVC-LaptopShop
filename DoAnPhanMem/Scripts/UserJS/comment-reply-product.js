@@ -172,6 +172,8 @@ var CreateReplyFeedback = function (id, acc_name) {
     $('#submit_reply_comm_' + _id).removeAttr('hidden');
     //gửi reply bình luận
     $('#submit_reply_comm_' + _id).click(function () {
+        const proID = $("#product_id").val();
+
         var _reply_content = $('#reply_comment_con_' + _id).val();
         if (_reply_content == "") {
             const Toast = Swal.mixin({
@@ -192,9 +194,9 @@ var CreateReplyFeedback = function (id, acc_name) {
         else {
             $.ajax({
                 type: "POST",
-                url: '/Products/ReplyComment',
+                url: '/Product/ReplyComment',
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({ id: _id, reply_content: _reply_content }),
+                data: JSON.stringify({ id: _id, reply_content: _reply_content, productID: proID}),
                 dataType: "json",
                 success: function (result) {
                     if (result == true) {

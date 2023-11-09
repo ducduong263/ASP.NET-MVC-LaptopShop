@@ -532,14 +532,7 @@
                                                                     </ul>
                                                                 </div>
                                                                 <div class="comment-content-right">
-                                                                    @if (User.Identity.IsAuthenticated)
-                                                                    {
                                                                         <a style="cursor:pointer;" onclick="CreateReplyFeedback(@comment.feedback_id, '@comment.Account.acc_name')"><i class="fa fa-reply"></i>Reply</a>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <a><i class="fa fa-reply"></i>Reply</a>
-                                                                    }
                                                                 </div>
                                                             </div>
                                                             <div class="para-content">
@@ -605,14 +598,13 @@
                                                                                 <div class="comment-content-left">
                                                                                     <h6 class="comment-name">@reply.Account.acc_name <span class="@(reply.Account.Role.role_name == "Admin"? "bg-role": reply.Account.Role.role_name == "Quản trị viên" ? "bg-role":"")">@(reply.Account.Role.role_name == "Admin"? "Quản trị viên": reply.Account.Role.role_name == "Biên tập viên" ? "Biên tập viên":"")</span></h6>
                                                                                 </div>
-                                                                                <div class="comment-content-right">
-                                                                                    <a style="cursor:pointer;" onclick="createChildReply(@comment.feedback_id,@reply.feedback_id, '@reply.Account.acc_name')"><i class="fa fa-reply"></i>Reply</a>
-                                                                                </div>
+                                                                                
                                                                             </div>
                                                                             <div class="para-content">
                                                                                 <div> @Html.Raw(reply.content)</div>
                                                                                 <p style="font-size: 12px; margin-bottom: 8px; color: #a5a5a5; ">@reply.create_at.ToString("HH:mm dd-MM-yyyy")</p>
                                                                             </div>
+
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -621,7 +613,6 @@
                                                         <div>
                                                             <form action="/" method="post">
                                                                 <input id="product_id" hidden value="@Model.pro_id" />
-
                                                                 <textarea id="childRepContent_@reply.feedback_id" hidden autofocus></textarea>
                                                                 <button id="submit_child_reply_comm_@reply.feedback_id" hidden style=" margin-top: 15px; margin-bottom: 12px; width: 98px;" class="btn btn-md btn-black-default-hover" type="button">Gửi đi</button>
                                                             </form>

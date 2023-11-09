@@ -24,7 +24,7 @@ namespace DoAnPhanMem.Models
         public int feedback_id { get; set; }
         public int account_id { get; set; }
         public int product_id { get; set; }
-        public int rate_star { get; set; }
+        public Nullable<int> rate_star { get; set; }
         public string status { get; set; }
         public string content { get; set; }
         public Nullable<int> replyfor { get; set; }
