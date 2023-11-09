@@ -85,57 +85,44 @@ $('#create_submit_comment').click(function () {
         })
         return false;
     }
-    else if (com_content.length < 10) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top',
-            showConfirmButton: false,
-            timer: 2500,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-        Toast.fire({
-            icon: 'warning',
-            title: 'Nội dung bình luận tối thiểu 10 ký tự'
-        })
-        return false;
-    }
-    else if (com_content.length > 500) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top',
-            showConfirmButton: false,
-            timer: 2500,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-        Toast.fire({
-            icon: 'warning',
-            title: 'Nội dung bình luận không quá 500 ký tự'
-        })
-        return false;
-    }
     else {
         $.ajax({
             type: "Post",
             url: "/Product/ProductComment",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ productID: proID, discountID: discID, genreID: genreID, rateStar: rateStar, commentContent: com_content }),
+            data: JSON.stringify({ productID: proID, rateStar: rateStar, commentContent: com_content }),
             dataType: "json",
             success: function (result) {
-                if (result == true) {
+                console.log("Ajax request successful. Result:", result);
+
+                if (result === true) {
                     setTimeout(function () {
                         window.location.reload();
                     }, 1);
                     //$('.comment-wrapper').append('<input class="form-control" type="text"/>');
-                    return;
+                } else {
+                    console.log("Comment not posted successfully. Showing error message.");
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Chức năng yêu cầu đăng nhập?'
+                    });
                 }
             },
             error: function () {
+                console.log("Ajax request failed. Showing error message.");
+
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top',
@@ -145,13 +132,14 @@ $('#create_submit_comment').click(function () {
                         toast.addEventListener('mouseenter', Swal.stopTimer)
                         toast.addEventListener('mouseleave', Swal.resumeTimer)
                     }
-                })
+                });
+
                 Toast.fire({
                     icon: 'error',
                     title: 'Chức năng yêu cầu đăng nhập?'
-                })
+                });
             }
-        })
+        });
     };
 });
 
@@ -200,40 +188,6 @@ var CreateReplyFeedback = function (id, acc_name) {
                 icon: 'warning',
                 title: 'Vui lòng nhập nội dung bình luận!'
             })
-        }
-        else if (_reply_content.length < 20) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top',
-                showConfirmButton: false,
-                timer: 2500,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-            Toast.fire({
-                icon: 'warning',
-                title: 'Nội dung tối thiểu 20 ký tự'
-            })
-            return false;
-        }
-        else if (_reply_content.length > 500) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top',
-                showConfirmButton: false,
-                timer: 2500,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-            Toast.fire({
-                icon: 'warning',
-                title: 'Nội dung bình luận không quá 500 ký tự'
-            })
-            return false;
         }
         else {
             $.ajax({
@@ -288,6 +242,8 @@ var CreateReplyFeedback = function (id, acc_name) {
     });
 }
 
+
+
 //3.phản hồi bình luận con
 var createChildReply = function (id, reply_id, acc_name) {
     child_ide = id;
@@ -302,7 +258,7 @@ var createChildReply = function (id, reply_id, acc_name) {
         toolbar = mobileToolbar;
     }
     editor = new Simditor({
-        textarea: $('#childRepContent_'+child_rep),
+        textarea: $('#childRepContent_' + child_rep),
         toolbar: toolbar,
         pasteImage: true,
         defaultImage: '/Content/Images/favicon.png',
@@ -317,8 +273,8 @@ var createChildReply = function (id, reply_id, acc_name) {
         });
     }
 
-    $('#submit_child_reply_comm_'+child_rep).click(function () {
-        var _child_reply_content = $('#childRepContent_'+child_rep ).val();
+    $('#submit_child_reply_comm_' + child_rep).click(function () {
+        var _child_reply_content = $('#childRepContent_' + child_rep).val();
         if (_child_reply_content == "") {
             const Toast = Swal.mixin({
                 toast: true,
@@ -334,40 +290,6 @@ var createChildReply = function (id, reply_id, acc_name) {
                 icon: 'warning',
                 title: 'Vui lòng nhập nội dung bình luận!'
             })
-        }
-        else if (_child_reply_content.length < 20) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top',
-                showConfirmButton: false,
-                timer: 2500,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-            Toast.fire({
-                icon: 'warning',
-                title: 'Nội dung bình luận tối thiểu 20 ký tự'
-            })
-            return false;
-        }
-        else if (_child_reply_content.length > 500) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top',
-                showConfirmButton: false,
-                timer: 2500,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-            Toast.fire({
-                icon: 'warning',
-                title: 'Nội dung bình luận không quá 500 ký tự'
-            })
-            return false;
         }
         else {
             $.ajax({

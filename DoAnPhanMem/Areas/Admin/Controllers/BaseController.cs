@@ -14,7 +14,7 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         {
             if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                System.Web.HttpContext.Current.Response.Redirect("~/Account/Login");
+                System.Web.HttpContext.Current.Response.Redirect("~/Home/Index");
             }
             else
             {
@@ -27,7 +27,7 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         //đăng xuất admin quay về trang chủ
         public ActionResult Logout()
         {
-            FormsAuthentication.SignOut();
+            Session.Clear();
             return Redirect("~/Home/Index");
         }
         //chuyển từ trang admin sang trang thông tin cá nhân

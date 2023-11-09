@@ -19,7 +19,7 @@
     string avgStar = "";
     foreach (var item in listFeedback)
     {
-        if (item.product_id == Model.pro_id)
+        if (item.product_id == Model.pro_id && item.replyfor == null)
         {
             foreach (var orderitem in OrderFeedback)
             {
@@ -117,7 +117,7 @@
                                         Sản phẩm
                                     </a>
                                 </li>
-                                
+
                                 <li class="active" aria-current="page">
                                     Chi tiết sản phẩm
                                 </li>
@@ -155,17 +155,7 @@
                     <!-- End Large Image -->
                     <!-- Start Thumbnail Image -->
                     <div class="product-image-thumb product-image-thumb-horizontal swiper-container pos-relative mt-5">
-                        <div class="swiper-wrapper">
-                            <div class="product-image-thumb-single swiper-slide">
-                                <img class="img-fluid" src="@Model.pro_img" alt="@Model.pro_name" />
-                            </div>
-                            @foreach (var item in listImage)
-                            {
-                                <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="@item.image" alt="@Model.pro_name" />
-                                </div>
-                            }
-                        </div>
+
                         <!-- Add Arrows -->
                         <div class="gallery-thumb-arrow swiper-button-next"></div>
                         <div class="gallery-thumb-arrow swiper-button-prev"></div>
@@ -375,10 +365,9 @@
                                             <h5>THÊM ĐÁNH GIÁ</h5>
                                             <span class="ms-2 text-secondary">(Đánh giá được tính khi bạn đã mua sản phẩm, chọn sao bên dưới để đánh giá sao)</span>
                                         </div>
+
                                         <form method="post">
                                             <input id="product_id" hidden value="@Model.pro_id" />
-                                            <input id="genre_id" hidden value="@Model.cate_id" />
-                                            <input id="discount_id" hidden value="@Model.discount_id" />
                                             <div onmouseout="CRateSelected()" style="font-size: 23px; text-align:center; cursor:pointer;">
                                                 <i id="rate1" onmouseout="CRateOut(1)" onmouseover="CRateOver(1)" onclick="CRateClick(1)" class="fa fa-star-o" aria-hidden="true"></i>
                                                 <i id="rate2" onmouseout="CRateOut(2)" onmouseover="CRateOver(2)" onclick="CRateClick(2)" class="fa fa-star-o" aria-hidden="true"></i>
@@ -404,7 +393,7 @@
                                         <!-- Start - Review Comment list-->
                                         @foreach (var comment in listFeedback)
                                         {
-                                            if (comment.product_id == Model.pro_id && comment.replyfor != null)
+                                            if (comment.product_id == Model.pro_id && comment.replyfor == null)
                                             {
                                                 <li class="comment-list">
                                                     <div class="comment-wrapper">
@@ -423,7 +412,7 @@
                                                                                 {
                                                                                     if (odt.Order.acc_id == comment.account_id && odt.pro_id == comment.product_id && odt.Order.status == "3")
                                                                                     {
-                                                                                        fbconfirm = "Đã mua tại KAOME";
+                                                                                        fbconfirm = "Đã mua hàng";
                                                                                         verify = "<i class='fa fa-check-circle' aria-hidden='true'></i>";
                                                                                     }
                                                                                 }
@@ -555,7 +544,7 @@
                                                             </div>
                                                             <div class="para-content">
                                                                 <div>@Html.Raw(comment.content)</div>
-                                                                <p style="font-size: 12px; margin-bottom: 8px; color: #a5a5a5; ">@comment.create_at</p>
+                                                                <p style="font-size: 12px; margin-bottom: 8px; color: #a5a5a5; ">@comment.create_at.ToString("HH:mm dd-MM-yyyy")</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -566,10 +555,45 @@
                                                         </form>
                                                     </div>
                                                     <!-- Start - Review Comment Reply-->
-                                                    @foreach (var reply in listReplyFeedback)
+                                                    @*@foreach (var reply in listReplyFeedback)
+                                                        {
+                                                            <ul class="comment-reply">
+                                                                @if (reply.feedback_id == comment.feedback_id)
+                                                                {
+                                                                    <li class="comment-reply-list">
+                                                                        <div class="comment-wrapper">
+                                                                            <div class="comment-img">
+                                                                                <img src="@reply.Account.avatar" alt="avatar" />
+                                                                            </div>
+                                                                            <div class="comment-content">
+                                                                                <div class="comment-content-top" style="margin-bottom:5px;">
+                                                                                    <div class="comment-content-left">
+                                                                                        <h6 class="comment-name">@reply.Account.acc_name <span class="@(reply.Account.Role.role_name == "Admin"? "bg-role": reply.Account.Role.role_name == "Quản trị viên" ? "bg-role":"")">@(reply.Account.Role.role_name == "Admin"? "Quản trị viên": reply.Account.Role.role_name == "Biên tập viên" ? "Biên tập viên":"")</span></h6>
+                                                                                    </div>
+                                                                                    <div class="comment-content-right">
+                                                                                        <a style="cursor:pointer;" onclick="createChildReply(@comment.feedback_id,@reply.rep_feed_id, '@reply.Account.acc_name')"><i class="fa fa-reply"></i>Reply</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="para-content">
+                                                                                    <div> @Html.Raw(reply.content)</div>
+                                                                                    <p style="font-size: 12px; margin-bottom: 8px; color: #a5a5a5; ">@reply.create_at.ToString("HH:mm dd-MM-yyyy")</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                            <div>
+                                                                <form action="/" method="post">
+                                                                    <textarea id="childRepContent_@reply.rep_feed_id" hidden autofocus></textarea>
+                                                                    <button id="submit_child_reply_comm_@reply.rep_feed_id" hidden style=" margin-top: 15px; margin-bottom: 12px; width: 98px;" class="btn btn-md btn-black-default-hover" type="button">Gửi đi</button>
+                                                                </form>
+                                                            </div>
+                                                        }*@
+                                                    @foreach (var reply in listFeedback)
                                                     {
                                                         <ul class="comment-reply">
-                                                            @if (reply.feedback_id == comment.feedback_id)
+                                                            @if (reply.replyfor == comment.feedback_id)
                                                             {
                                                                 <li class="comment-reply-list">
                                                                     <div class="comment-wrapper">
@@ -582,7 +606,7 @@
                                                                                     <h6 class="comment-name">@reply.Account.acc_name <span class="@(reply.Account.Role.role_name == "Admin"? "bg-role": reply.Account.Role.role_name == "Quản trị viên" ? "bg-role":"")">@(reply.Account.Role.role_name == "Admin"? "Quản trị viên": reply.Account.Role.role_name == "Biên tập viên" ? "Biên tập viên":"")</span></h6>
                                                                                 </div>
                                                                                 <div class="comment-content-right">
-                                                                                    <a style="cursor:pointer;" onclick="createChildReply(@comment.feedback_id,@reply.rep_feed_id, '@reply.Account.acc_name')"><i class="fa fa-reply"></i>Reply</a>
+                                                                                    <a style="cursor:pointer;" onclick="createChildReply(@comment.feedback_id,@reply.feedback_id, '@reply.Account.acc_name')"><i class="fa fa-reply"></i>Reply</a>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="para-content">
@@ -596,8 +620,10 @@
                                                         </ul>
                                                         <div>
                                                             <form action="/" method="post">
-                                                                <textarea id="childRepContent_@reply.rep_feed_id" hidden autofocus></textarea>
-                                                                <button id="submit_child_reply_comm_@reply.rep_feed_id" hidden style=" margin-top: 15px; margin-bottom: 12px; width: 98px;" class="btn btn-md btn-black-default-hover" type="button">Gửi đi</button>
+                                                                <input id="product_id" hidden value="@Model.pro_id" />
+
+                                                                <textarea id="childRepContent_@reply.feedback_id" hidden autofocus></textarea>
+                                                                <button id="submit_child_reply_comm_@reply.feedback_id" hidden style=" margin-top: 15px; margin-bottom: 12px; width: 98px;" class="btn btn-md btn-black-default-hover" type="button">Gửi đi</button>
                                                             </form>
                                                         </div>
                                                     }
@@ -823,5 +849,34 @@
             return false;
         });
 
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        function updateRateStar() {
+            // Cập nhật giá trị của rateStar dựa trên giá trị của lblRating
+            var lblRatingValue = document.getElementById("lblRating").value;
+            document.getElementById("rateStar").value = lblRatingValue;
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            ClassicEditor
+                .create(document.querySelector('#editor1'))
+                .then(editor => {
+                    console.log(editor);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            ClassicEditor
+                .create(document.querySelector('#editor2'))
+                .then(editor => {
+                    console.log(editor);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
     </script>
 }

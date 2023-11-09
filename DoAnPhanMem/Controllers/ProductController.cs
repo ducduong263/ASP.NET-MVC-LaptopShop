@@ -70,13 +70,51 @@ namespace DoAnPhanMem.Controllers
         }
 
         [HttpPost]
-        public JsonResult ProductComment(Feedback comment, int productID, int discountID, int genreID, int rateStar, string commentContent)
+        public JsonResult ProductComment(Feedback comment, int productID, int rateStar, string commentContent)
         {
+
             var user = Session["TaiKhoan"] as Account;
             bool result = false;
-            int userID = user.acc_id;
+
             if (user != null)
             {
+                int userID = user.acc_id;
+                comment.account_id = userID;
+                comment.rate_star = rateStar;
+                comment.product_id = productID;
+                comment.content = commentContent;
+                comment.status = "2";
+                comment.create_at = DateTime.Now;
+                bool hasPurchased = db.Oder_Detail.Any(od => od.Order.acc_id == userID && od.pro_id == productID && od.Order.status == "3");
+                if (hasPurchased)
+                {
+                    db.Feedbacks.Add(comment);
+                    db.SaveChanges();
+                    result = true;
+                    Notification.setNotification3s("Bình luận thành công", "success");
+                }
+                else
+                {
+                    result = true;
+                    Notification.setNotification5s("Đánh giá chỉ được ghi nhận khi bạn đã sản phẩm này", "warning");
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult ProductComment2(Feedback comment, int productID, int rateStar, string commentContent)
+        {
+            string returnUrl = Request.UrlReferrer.ToString();
+            var user = Session["TaiKhoan"] as Account;
+            //bool result = false;
+            if (user != null)
+            {
+                int userID = user.acc_id;
                 comment.account_id = userID;
                 comment.rate_star = rateStar;
                 comment.product_id = productID;
@@ -85,8 +123,32 @@ namespace DoAnPhanMem.Controllers
                 comment.create_at = DateTime.Now;
                 db.Feedbacks.Add(comment);
                 db.SaveChanges();
-                result = true;
+                //result = true;
                 Notification.setNotification3s("Bình luận thành công", "success");
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                Notification.setNotification3s("Chức năng này yêu cầu đăng nhập", "warning");
+                return Redirect(returnUrl);
+            }
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+        public JsonResult ReplyComment(int id, string reply_content, ReplyFeedback reply)
+        {
+            bool result = false;
+            if (User.Identity.IsAuthenticated)
+            {
+                reply.feedback_id = id;
+                reply.account_id = User.Identity.GetUserId();
+                reply.content = reply_content;
+                reply.stastus = "2";
+                reply.create_at = DateTime.Now;
+                db.ReplyFeedbacks.Add(reply);
+                db.SaveChanges();
+                result = true;
+                Notification.setNotification3s("Phản hồi thành công", "success");
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             else
@@ -94,6 +156,5 @@ namespace DoAnPhanMem.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
-
     }
 }

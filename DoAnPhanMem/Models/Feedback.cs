@@ -28,7 +28,7 @@ namespace DoAnPhanMem.Models
         public string status { get; set; }
         public string content { get; set; }
         public Nullable<int> replyfor { get; set; }
-        public Nullable<System.DateTime> create_at { get; set; }
+        public System.DateTime create_at { get; set; }
     
         public virtual Account Account { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
