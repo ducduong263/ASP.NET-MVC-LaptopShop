@@ -68,5 +68,6 @@ namespace DoAnPhanMem.Controllers
             ViewBag.PagerFeedback = comments.ToPagedList(currentPage, pageSize);
             return View(product);
         }
+
     }
 }

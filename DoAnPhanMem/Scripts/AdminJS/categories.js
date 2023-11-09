@@ -1,82 +1,90 @@
-﻿////1. Thêm mới 
-////2. Chỉnh sửa
-////3. Xóa
-////------------------------------------------------/
-const createModal = $('#create-modal')
-const editModal = $('#edit-modal')
+﻿//1. Thêm mới 
+//2. Chỉnh sửa
+//3. Xóa
+// -----------------------------------------------------/
+const createModal = $('#create-modal');
+const editModal = $('#edit-modal');
 const deleteModal = $('#delete-modal');
-let genreID;
+let categoryID;
+
 $('.dimis-modal').click(function () {
     createModal.modal('hide');
     editModal.modal('hide');
     deleteModal.modal('hide');
 });
-//1. thêm mới
+
+// 1. Thêm mới
 $('#create__open').click(function () {
     createModal.modal('show');
 });
+
 $('#create__save').click(function () {
-    const name = $('#create__input').val()
-    if (name == "") {
+    const name = $('#create__input').val();
+    if (name === "") {
         const Toast = Swal.mixin({
             toast: true,
             position: 'top',
             showConfirmButton: false,
             timer: 1500,
             didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
             }
-        })
+        });
+
         Toast.fire({
             icon: 'warning',
             title: 'Nhập tên loại'
-        })
+        });
         return;
     }
+
     return $.ajax({
         type: "POST",
         url: '/Categories/Create',
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ genreName: name }),
+        data: JSON.stringify({ cateName: name }),
         dataType: "json",
         success: function (result) {
-            if (result == "exist") {
+            if (result === "exist") {
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
                     timer: 1500,
                     didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
                     }
-                })
+                });
+
                 Toast.fire({
                     icon: 'error',
                     title: 'Tên đã tồn tại'
-                })
+                });
                 return;
-            }
-            else {
+            } else {
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
                     timer: 1000,
                     didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
                     }
-                })
+                });
+
                 Toast.fire({
                     icon: 'success',
                     title: 'Thêm thành công'
-                })
+                });
+
                 setTimeout(function () {
                     window.location.reload();
                 }, 500);
-                createModalLogin.modal('hide');
+
+                createModal.modal('hide');
                 return;
             }
         },
@@ -87,82 +95,88 @@ $('#create__save').click(function () {
                 showConfirmButton: false,
                 timer: 1500,
                 didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
                 }
-            })
+            });
+
             Toast.fire({
                 icon: 'error',
                 title: 'Thêm không thành công'
-            })
+            });
         }
     });
 });
 
-//2. Chỉnh sửa
+// 2. Chỉnh sửa
 var editOpen = function (id, name) {
     editModal.find('#edit__input').val(name);
     editModal.modal('show');
-    genreID = id;
-}
+    categoryID = id;
+};
+
 $('#edit__save').click(function () {
-    const name = $('#edit__input').val()
-    if (name == "") {
+    const name = $('#edit__input').val();
+    if (name === "") {
         const Toast = Swal.mixin({
             toast: true,
             position: 'top',
             showConfirmButton: false,
             timer: 1500,
             didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
             }
-        })
+        });
+
         Toast.fire({
             icon: 'warning',
             title: 'Nhập tên loại'
-        })
+        });
         return;
     }
+
     return $.ajax({
         type: "POST",
         url: '/Categories/Edit',
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ id: genreID, genreName: name }),
+        data: JSON.stringify({ id: categoryID, cateName: name }),
         dataType: "json",
         success: function (result) {
-            if (result == "exist") {
+            if (result === "exist") {
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top',
                     showConfirmButton: false,
                     timer: 1500,
                     didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
                     }
-                })
+                });
+
                 Toast.fire({
                     icon: 'error',
                     title: 'Tên đã tồn tại'
-                })
+                });
                 return;
-            }
-            else {
+            } else {
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
                     timer: 1000,
                     didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
                     }
-                })
+                });
+
                 Toast.fire({
                     icon: 'success',
                     title: 'Cập nhật thành công'
-                })
+                });
+
                 setTimeout(function () {
                     window.location.reload();
                 }, 500);
@@ -176,48 +190,53 @@ $('#edit__save').click(function () {
                 showConfirmButton: false,
                 timer: 1500,
                 didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
                 }
-            })
+            });
+
             Toast.fire({
                 icon: 'error',
-                title: 'Chỉnh sửa thành công'
-            })
+                title: 'Chỉnh sửa không thành công'
+            });
         }
     });
 });
-//3. Xóa 
+
+// 3. Xóa
 var deleteOpen = function (id, name) {
     deleteModal.find('#delete__name').text(name);
     deleteModal.modal('show');
-    genreID = id;
-}
+    categoryID = id;
+};
+
 $('#delete__submit').click(function () {
     $.ajax({
         type: "POST",
         url: '/Categories/Delete',
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ id: genreID }),
+        data: JSON.stringify({ id: categoryID }),
         dataType: "json",
         success: function (result) {
-            if (result == "delete") {
+            if (result === "delete") {
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
                     timer: 1000,
                     didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
                     }
-                })
+                });
+
                 Toast.fire({
                     icon: 'success',
                     title: 'Xóa thành công'
-                })
+                });
+
                 deleteModal.modal('hide');
-                $("#item_" + genreID).remove();
+                $("#item_" + categoryID).remove();
                 return;
             }
         },
@@ -228,14 +247,15 @@ $('#delete__submit').click(function () {
                 showConfirmButton: false,
                 timer: 1500,
                 didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
                 }
-            })
+            });
+
             Toast.fire({
                 icon: 'error',
                 title: 'Xóa thất bại'
-            })
+            });
         }
     });
 });

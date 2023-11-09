@@ -39,7 +39,7 @@ namespace DoAnPhanMem.Controllers
             ViewBag.Discount = discount;
             return View(listProduct);
         }
-        public ActionResult AddToCart(int productId, int quantity,string action)
+        public ActionResult AddToCart(int productId, int quantity, string action)
         {
             var cart = Session["Cart"] as List<CartModel>;
             if (cart == null)
@@ -70,7 +70,7 @@ namespace DoAnPhanMem.Controllers
                 }
             }
             Session["Cart"] = cart;
-            if(action == "addtocart" || action == "AddToCart")
+            if (action == "addtocart" || action == "AddToCart")
             {
                 string returnUrl = Request.UrlReferrer.ToString();
                 Notification.setNotification1_5s("Thêm vào giỏ hàng thành công", "success");
@@ -262,7 +262,7 @@ namespace DoAnPhanMem.Controllers
                 delivery_id = deliveryId,
                 oder_address = address,
                 payment_id = 1,
-                total = priceSum  + priDeli,
+                total = priceSum + priDeli,
                 note = note,
                 oderUsername = acc_name,
                 oderPhone = phone
@@ -272,13 +272,7 @@ namespace DoAnPhanMem.Controllers
             {
                 var item = cart.Item1[i];
                 var _price = item.price;
-                if (item.Discount != null)
-                {
-                    if (item.Discount.discount_start < DateTime.Now && item.Discount.discount_end > DateTime.Now)
-                    {
-                        _price = item.price - item.Discount.discount_price;
-                    }
-                }
+                _price = item.price;
                 order.Oder_Detail.Add(new Oder_Detail
                 {
                     pro_id = item.pro_id,
@@ -319,4 +313,4 @@ namespace DoAnPhanMem.Controllers
         }
     }
 }
-    
+
