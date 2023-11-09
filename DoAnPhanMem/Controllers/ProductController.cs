@@ -69,5 +69,31 @@ namespace DoAnPhanMem.Controllers
             return View(product);
         }
 
+        [HttpPost]
+        public JsonResult ProductComment(Feedback comment, int productID, int discountID, int genreID, int rateStar, string commentContent)
+        {
+            var user = Session["TaiKhoan"] as Account;
+            bool result = false;
+            int userID = user.acc_id;
+            if (user != null)
+            {
+                comment.account_id = userID;
+                comment.rate_star = rateStar;
+                comment.product_id = productID;
+                comment.content = commentContent;
+                comment.status = "2";
+                comment.create_at = DateTime.Now;
+                db.Feedbacks.Add(comment);
+                db.SaveChanges();
+                result = true;
+                Notification.setNotification3s("Bình luận thành công", "success");
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

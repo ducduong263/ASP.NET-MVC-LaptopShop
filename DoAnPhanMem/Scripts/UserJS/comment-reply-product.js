@@ -85,7 +85,7 @@ $('#create_submit_comment').click(function () {
         })
         return false;
     }
-    else if (com_content.length < 20) {
+    else if (com_content.length < 10) {
         const Toast = Swal.mixin({
             toast: true,
             position: 'top',
@@ -98,7 +98,7 @@ $('#create_submit_comment').click(function () {
         })
         Toast.fire({
             icon: 'warning',
-            title: 'Nội dung bình luận tối thiểu 20 ký tự'
+            title: 'Nội dung bình luận tối thiểu 10 ký tự'
         })
         return false;
     }
@@ -122,7 +122,7 @@ $('#create_submit_comment').click(function () {
     else {
         $.ajax({
             type: "Post",
-            url: "/Products/ProductComment",
+            url: "/Product/ProductComment",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ productID: proID, discountID: discID, genreID: genreID, rateStar: rateStar, commentContent: com_content }),
             dataType: "json",
