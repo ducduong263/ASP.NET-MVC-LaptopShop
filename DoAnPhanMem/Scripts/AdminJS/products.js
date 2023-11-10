@@ -156,8 +156,22 @@ $('#delete-product').click(function (event) {
                     icon: 'success',
                     title: 'Xóa thành công'
                 })
-                $("#item_"+id).remove();
-                return;
+                $("#item_" + id).remove();
+            } else if (result == "exist") {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Đang có đơn hàng của sản phẩm này nên không thể xóa'
+                })
             }
         },
         error: function () {
@@ -178,6 +192,7 @@ $('#delete-product').click(function (event) {
         }
     });
 });
+
 //4. Preview ảnh
 var counter = 1;
 $("#btn2").click(function () {

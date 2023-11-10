@@ -237,7 +237,22 @@ $('#delete__submit').click(function () {
 
                 deleteModal.modal('hide');
                 $("#item_" + categoryID).remove();
-                return;
+            } else if (result === "exist") {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Đang có sản phẩm thuộc danh mục này nên không thể xóa'
+                });
             }
         },
         error: function () {

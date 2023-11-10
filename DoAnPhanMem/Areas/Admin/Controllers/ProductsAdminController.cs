@@ -211,6 +211,13 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         public JsonResult Delete(int id)
         {
             string result = "error";
+
+            var checkExistOrder = db.Oder_Detail.FirstOrDefault(m => m.pro_id == id);
+            if(checkExistOrder != null)
+            {
+                result = "exist";
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
             Product product = db.Products.FirstOrDefault(m => m.pro_id == id);
             try
             {

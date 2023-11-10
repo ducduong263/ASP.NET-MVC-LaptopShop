@@ -84,6 +84,13 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         public ActionResult Delete(int id)
         {
             string result = "error";
+
+            bool check = _db.Products.Any(m => m.brand_id == id);
+            if(check)
+            {
+                result = "exist";
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
             Brand brand = _db.Brands.FirstOrDefault(m => m.brand_id == id);
             try
             {

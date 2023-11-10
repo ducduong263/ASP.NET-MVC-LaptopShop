@@ -58,6 +58,7 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         public JsonResult Edit(int id, string cateName)
         {
             string result = "error";
+           
             Category category = db.Categories.FirstOrDefault(c => c.cate_id == id);
             var checkExist = db.Categories.SingleOrDefault(c => c.cate_name == cateName);
             try
@@ -83,6 +84,13 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         public ActionResult Delete(int id)
         {
             string result = "error";
+            bool check = db.Products.Any(m => m.brand_id == id);
+            if (check)
+            {
+                result = "exist";
+                return Json(result, JsonRequestBehavior.AllowGet);
+
+            }
             Category category = db.Categories.FirstOrDefault(c => c.cate_id == id);
             try
             {
