@@ -54,7 +54,6 @@ namespace DoAnPhanMem.Controllers
 
         public ActionResult Register()
         {
-
             Account model = new Account();
             if (User.Identity.IsAuthenticated)
             {
@@ -76,15 +75,13 @@ namespace DoAnPhanMem.Controllers
             int roleid = db.Roles.FirstOrDefault(role => role.role_name == "Người dùng")?.role_id ?? 0;
             account.acc_status = "1";
             account.role_id = roleid;
-
-            //account.email = account.email;
-            //account.acc_name = account.acc_name;
             account.avatar = "/Content/Images/avatar/default.jpg";
             db.Configuration.ValidateOnSaveEnabled = false;
             db.Accounts.Add(account);
             db.SaveChanges();
+            Session["TaiKhoan"] = account;
             Notification.setNotification1_5s("Đăng ký thành công", "success");
-            return RedirectToAction("Login", "Account", account);
+            return RedirectToAction("Index", "Home", account);
         }
         public ActionResult ChangePassword()
         {
