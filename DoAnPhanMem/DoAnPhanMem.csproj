@@ -221,9 +221,6 @@
     <Compile Include="Models\ProductImg.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ReplyFeedback.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Role.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

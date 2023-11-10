@@ -155,17 +155,6 @@
           <Property Name="product_id" Type="int" Nullable="false" />
           <Property Name="image" Type="nvarchar" MaxLength="500" />
         </EntityType>
-        <EntityType Name="ReplyFeedback">
-          <Key>
-            <PropertyRef Name="rep_feed_id" />
-          </Key>
-          <Property Name="rep_feed_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="content" Type="nvarchar(max)" />
-          <Property Name="status" Type="nvarchar" MaxLength="1" />
-          <Property Name="feedback_id" Type="int" Nullable="false" />
-          <Property Name="acc_id" Type="int" Nullable="false" />
-          <Property Name="create_at" Type="datetime" />
-        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="role_id" />
@@ -351,30 +340,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ReplyFeedback_Account">
-          <End Role="Account" Type="Self.Account" Multiplicity="1" />
-          <End Role="ReplyFeedback" Type="Self.ReplyFeedback" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="acc_id" />
-            </Principal>
-            <Dependent Role="ReplyFeedback">
-              <PropertyRef Name="acc_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReplyFeedback_Feedback">
-          <End Role="Feedback" Type="Self.Feedback" Multiplicity="1" />
-          <End Role="ReplyFeedback" Type="Self.ReplyFeedback" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feedback">
-              <PropertyRef Name="feedback_id" />
-            </Principal>
-            <Dependent Role="ReplyFeedback">
-              <PropertyRef Name="feedback_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="WebshopModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AccountAddress" EntityType="Self.AccountAddress" Schema="dbo" store:Type="Tables" />
@@ -389,7 +354,6 @@
           <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductImg" EntityType="Self.ProductImg" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ReplyFeedback" EntityType="Self.ReplyFeedback" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Account_Role" Association="Self.FK_Account_Role">
@@ -448,14 +412,6 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="ProductImg" EntitySet="ProductImg" />
           </AssociationSet>
-          <AssociationSet Name="FK_ReplyFeedback_Account" Association="Self.FK_ReplyFeedback_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="ReplyFeedback" EntitySet="ReplyFeedback" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReplyFeedback_Feedback" Association="Self.FK_ReplyFeedback_Feedback">
-            <End Role="Feedback" EntitySet="Feedback" />
-            <End Role="ReplyFeedback" EntitySet="ReplyFeedback" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -477,7 +433,6 @@
           <NavigationProperty Name="AccountAddresses" Relationship="Self.FK_AccountAddress_Account" FromRole="Account" ToRole="AccountAddress" />
           <NavigationProperty Name="Feedbacks" Relationship="Self.FK_Feedback_Account" FromRole="Account" ToRole="Feedback" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Order_Account" FromRole="Account" ToRole="Order" />
-          <NavigationProperty Name="ReplyFeedbacks" Relationship="Self.FK_ReplyFeedback_Account" FromRole="Account" ToRole="ReplyFeedback" />
           <Property Name="address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AccountAddress">
@@ -557,7 +512,6 @@
           <NavigationProperty Name="Feedback1" Relationship="Self.FK_Feedback_Feedback" FromRole="Feedback" ToRole="Feedback1" />
           <NavigationProperty Name="Feedback2" Relationship="Self.FK_Feedback_Feedback" FromRole="Feedback1" ToRole="Feedback" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Feedback_Product" FromRole="Feedback" ToRole="Product" />
-          <NavigationProperty Name="ReplyFeedbacks" Relationship="Self.FK_ReplyFeedback_Feedback" FromRole="Feedback" ToRole="ReplyFeedback" />
           <Property Name="create_at" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Oder_Detail">
@@ -631,19 +585,6 @@
           <NavigationProperty Name="Oder_Detail" Relationship="Self.FK_Oder_Detail_Product" FromRole="Product" ToRole="Oder_Detail" />
           <NavigationProperty Name="ProductImgs" Relationship="WebshopModel.FK_ProductImg_Product" FromRole="Product" ToRole="ProductImg" />
         </EntityType>
-        <EntityType Name="ReplyFeedback">
-          <Key>
-            <PropertyRef Name="rep_feed_id" />
-          </Key>
-          <Property Name="rep_feed_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="status" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="feedback_id" Type="Int32" Nullable="false" />
-          <Property Name="acc_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Account" Relationship="Self.FK_ReplyFeedback_Account" FromRole="ReplyFeedback" ToRole="Account" />
-          <NavigationProperty Name="Feedback" Relationship="Self.FK_ReplyFeedback_Feedback" FromRole="ReplyFeedback" ToRole="Feedback" />
-          <Property Name="create_at" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="role_id" />
@@ -706,18 +647,6 @@
               <PropertyRef Name="acc_id" />
             </Principal>
             <Dependent Role="Order">
-              <PropertyRef Name="acc_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReplyFeedback_Account">
-          <End Role="Account" Type="Self.Account" Multiplicity="1" />
-          <End Role="ReplyFeedback" Type="Self.ReplyFeedback" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="acc_id" />
-            </Principal>
-            <Dependent Role="ReplyFeedback">
               <PropertyRef Name="acc_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -794,18 +723,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ReplyFeedback_Feedback">
-          <End Role="Feedback" Type="Self.Feedback" Multiplicity="1" />
-          <End Role="ReplyFeedback" Type="Self.ReplyFeedback" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feedback">
-              <PropertyRef Name="feedback_id" />
-            </Principal>
-            <Dependent Role="ReplyFeedback">
-              <PropertyRef Name="feedback_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Oder_Detail_Order">
           <End Role="Order" Type="Self.Order" Multiplicity="1" />
           <End Role="Oder_Detail" Type="Self.Oder_Detail" Multiplicity="*" />
@@ -855,7 +772,6 @@
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="Payments" EntityType="Self.Payment" />
           <EntitySet Name="Products" EntityType="Self.Product" />
-          <EntitySet Name="ReplyFeedbacks" EntityType="Self.ReplyFeedback" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <AssociationSet Name="FK_Account_Role" Association="Self.FK_Account_Role">
@@ -873,10 +789,6 @@
           <AssociationSet Name="FK_Order_Account" Association="Self.FK_Order_Account">
             <End Role="Account" EntitySet="Accounts" />
             <End Role="Order" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReplyFeedback_Account" Association="Self.FK_ReplyFeedback_Account">
-            <End Role="Account" EntitySet="Accounts" />
-            <End Role="ReplyFeedback" EntitySet="ReplyFeedbacks" />
           </AssociationSet>
           <AssociationSet Name="FK_Product_Brand" Association="Self.FK_Product_Brand">
             <End Role="Brand" EntitySet="Brands" />
@@ -901,10 +813,6 @@
           <AssociationSet Name="FK_Feedback_Product" Association="Self.FK_Feedback_Product">
             <End Role="Product" EntitySet="Products" />
             <End Role="Feedback" EntitySet="Feedbacks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReplyFeedback_Feedback" Association="Self.FK_ReplyFeedback_Feedback">
-            <End Role="Feedback" EntitySet="Feedbacks" />
-            <End Role="ReplyFeedback" EntitySet="ReplyFeedbacks" />
           </AssociationSet>
           <AssociationSet Name="FK_Oder_Detail_Order" Association="Self.FK_Oder_Detail_Order">
             <End Role="Order" EntitySet="Orders" />
@@ -1099,18 +1007,6 @@
                 <ScalarProperty Name="pro_img" ColumnName="pro_img" />
                 <ScalarProperty Name="pro_description" ColumnName="pro_description" />
                 <ScalarProperty Name="update_at" ColumnName="update_at" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ReplyFeedbacks">
-            <EntityTypeMapping TypeName="WebshopModel.ReplyFeedback">
-              <MappingFragment StoreEntitySet="ReplyFeedback">
-                <ScalarProperty Name="create_at" ColumnName="create_at" />
-                <ScalarProperty Name="rep_feed_id" ColumnName="rep_feed_id" />
-                <ScalarProperty Name="content" ColumnName="content" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="feedback_id" ColumnName="feedback_id" />
-                <ScalarProperty Name="acc_id" ColumnName="acc_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

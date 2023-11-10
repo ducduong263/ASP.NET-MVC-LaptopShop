@@ -18,7 +18,6 @@ namespace DoAnPhanMem.Models
         public Feedback()
         {
             this.Feedback1 = new HashSet<Feedback>();
-            this.ReplyFeedbacks = new HashSet<ReplyFeedback>();
         }
     
         public int feedback_id { get; set; }
@@ -35,7 +34,5 @@ namespace DoAnPhanMem.Models
         public virtual ICollection<Feedback> Feedback1 { get; set; }
         public virtual Feedback Feedback2 { get; set; }
         public virtual Product Product { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReplyFeedback> ReplyFeedbacks { get; set; }
     }
 }

@@ -19,12 +19,12 @@ namespace DoAnPhanMem.Models
             : base("name=WebshopEntities")
         {
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-
+    
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AccountAddress> AccountAddresses { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
@@ -37,7 +37,6 @@ namespace DoAnPhanMem.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<ReplyFeedback> ReplyFeedbacks { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<ProductImg> ProductImgs { get; set; }
