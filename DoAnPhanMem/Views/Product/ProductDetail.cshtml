@@ -532,7 +532,7 @@
                                                                     </ul>
                                                                 </div>
                                                                 <div class="comment-content-right">
-                                                                        <a style="cursor:pointer;" onclick="CreateReplyFeedback(@comment.feedback_id, '@comment.Account.acc_name')"><i class="fa fa-reply"></i>Reply</a>
+                                                                    <a style="cursor:pointer;" onclick="CreateReplyFeedback(@comment.feedback_id, '@comment.Account.acc_name')"><i class="fa fa-reply"></i>Reply</a>
                                                                 </div>
                                                             </div>
                                                             <div class="para-content">
@@ -596,9 +596,17 @@
                                                                         <div class="comment-content">
                                                                             <div class="comment-content-top" style="margin-bottom:5px;">
                                                                                 <div class="comment-content-left">
-                                                                                    <h6 class="comment-name">@reply.Account.acc_name <span class="@(reply.Account.Role.role_name == "Admin"? "bg-role": reply.Account.Role.role_name == "Quản trị viên" ? "bg-role":"")">@(reply.Account.Role.role_name == "Admin"? "Quản trị viên": reply.Account.Role.role_name == "Biên tập viên" ? "Biên tập viên":"")</span></h6>
+                                                                                    @*  <h6 class="comment-name">@reply.Account.acc_name <span class="@(reply.Account.Role.role_name == "Admin"? "bg-role": reply.Account.Role.role_name == "Quản trị viên" ? "bg-role":"")">@(reply.Account.Role.role_name == "Admin"? "Quản trị viên": reply.Account.Role.role_name == "Nhân viên" ? "Nhân viên":"")</span></h6>*@
+                                                                                    <h6 class="comment-name">
+                                                                                        @reply.Account.acc_name <span class="@(reply.Account.Role.role_name == "Admin" || reply.Account.Role.role_name == "Nhân viên" ? "bg-role" : "")">
+                                                                                            @(reply.Account.Role.role_name == "Admin" ? "Quản trị viên" :
+                                                                                                                                                        reply.Account.Role.role_name == "Nhân viên" ? "Nhân viên" :
+                                                                                                                                                        reply.Account.Role.role_name
+                                                                                                                                                    )
+                                                                                        </span>
+                                                                                    </h6>
                                                                                 </div>
-                                                                                
+
                                                                             </div>
                                                                             <div class="para-content">
                                                                                 <div> @Html.Raw(reply.content)</div>

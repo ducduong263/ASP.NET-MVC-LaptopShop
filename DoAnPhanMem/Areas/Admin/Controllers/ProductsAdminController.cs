@@ -136,7 +136,7 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Edit(Product model, ProductImg productImage)
+        public ActionResult Edit(Product model)
         {
             ViewBag.ListDiscount = new SelectList(db.Discounts.OrderBy(m => m.discount_price), "discount_id", "discount_name", 0);
             ViewBag.ListBrand = new SelectList(db.Brands, "brand_id", "brand_name", 0);
@@ -156,6 +156,7 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
                 product.quantity = model.quantity;
                 product.pro_description = model.pro_description;
                 product.specification = model.specification;
+                product.discount_id = model.discount_id;
                 product.price = model.price;
                 product.brand_id = model.brand_id;
                 product.cate_id = model.cate_id;

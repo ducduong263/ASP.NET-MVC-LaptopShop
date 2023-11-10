@@ -73,7 +73,7 @@ namespace DoAnPhanMem.Controllers
                 Notification.setNotification3s("Email đã được sử dụng!!!", "error");
                 return View();
             }
-            int roleid = db.Roles.FirstOrDefault(role => role.role_name == "Khách")?.role_id ?? 0;
+            int roleid = db.Roles.FirstOrDefault(role => role.role_name == "Người dùng")?.role_id ?? 0;
             account.acc_status = "1";
             account.role_id = roleid;
 

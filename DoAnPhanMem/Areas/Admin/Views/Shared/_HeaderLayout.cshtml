@@ -126,7 +126,7 @@
                                 </span>
                                 <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px" style="">
                                     <div class="menu-item">
-                                        <a class="menu-link active py-3" href="@Url.Action("Index","Orders")">
+                                        <a class="menu-link active py-3" href="@Url.Action("Index","Auth")">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -1521,7 +1521,7 @@
                          data-kt-menu-trigger="click"
                          data-kt-menu-attach="parent"
                          data-kt-menu-placement="bottom-end">
-                        <img src="#" alt="user" />
+                        <img src="~/Content/Images/avatar/default.jpg" alt="user" />
                     </div>
                     <!--begin::User account menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-275px"
@@ -1537,7 +1537,7 @@
                                 <!--begin::Username-->
                                 <div class="d-flex flex-column">
                                     <div class="fw-bolder d-flex align-items-center fs-5">
-                                        @*@taiKhoan.acc_name*@
+                                        @taiKhoan.acc_name
                                         @*<span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Pro</span>*@
                                     </div>
                                     <a href="#"
@@ -1556,12 +1556,7 @@
                                class="menu-link px-5">Về trang chủ</a>
                         </div>
                         <!--end::Menu item-->
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-5 my-1">
-                            <a href="@Url.Action("ViewProfile","Base")"
-                               class="menu-link px-5">Thiết lập tài khoản</a>
-                        </div>
-                        <!--end::Menu item-->
+                     
                         <!--begin::Menu item-->
                         <div class="menu-item px-5">
                             <a href="@Url.Action("Logout","Base")"

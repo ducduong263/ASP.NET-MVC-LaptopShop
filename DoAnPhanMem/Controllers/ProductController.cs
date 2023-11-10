@@ -87,7 +87,7 @@ namespace DoAnPhanMem.Controllers
                 comment.status = "2";
                 comment.create_at = DateTime.Now;
                 bool hasPurchased = db.Oder_Detail.Any(od => od.Order.acc_id == userID && od.pro_id == productID && od.Order.status == "3");
-                if (hasPurchased)
+                if (hasPurchased || user.Role.role_name == "Admin" || user.Role.role_name == "Nhân viên")
                 {
                     db.Feedbacks.Add(comment);
                     db.SaveChanges();
@@ -124,7 +124,7 @@ namespace DoAnPhanMem.Controllers
                 comment.status = "2";
                 comment.create_at = DateTime.Now;
                 bool hasPurchased = db.Oder_Detail.Any(od => od.Order.acc_id == userID && od.pro_id == productID && od.Order.status == "3");
-                if (hasPurchased || user.role_id == 1)
+                if (hasPurchased || user.Role.role_name == "Admin" || user.Role.role_name == "Nhân viên")
                 {
                     db.Feedbacks.Add(comment);
                     db.SaveChanges();
