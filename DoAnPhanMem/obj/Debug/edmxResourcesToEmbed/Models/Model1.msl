@@ -152,18 +152,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ReplyFeedbacks">
-      <EntityTypeMapping TypeName="WebshopModel.ReplyFeedback">
-        <MappingFragment StoreEntitySet="ReplyFeedback">
-          <ScalarProperty Name="create_at" ColumnName="create_at" />
-          <ScalarProperty Name="rep_feed_id" ColumnName="rep_feed_id" />
-          <ScalarProperty Name="content" ColumnName="content" />
-          <ScalarProperty Name="status" ColumnName="status" />
-          <ScalarProperty Name="feedback_id" ColumnName="feedback_id" />
-          <ScalarProperty Name="acc_id" ColumnName="acc_id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Roles">
       <EntityTypeMapping TypeName="WebshopModel.Role">
         <MappingFragment StoreEntitySet="Role">

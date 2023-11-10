@@ -22,7 +22,6 @@ namespace DoAnPhanMem.Models
             this.AccountAddresses = new HashSet<AccountAddress>();
             this.Feedbacks = new HashSet<Feedback>();
             this.Orders = new HashSet<Order>();
-            this.ReplyFeedbacks = new HashSet<ReplyFeedback>();
         }
     
         public int acc_id { get; set; }
@@ -77,7 +76,6 @@ namespace DoAnPhanMem.Models
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReplyFeedback> ReplyFeedbacks { get; set; }
+      
     }
 }

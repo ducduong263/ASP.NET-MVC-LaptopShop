@@ -61,7 +61,7 @@ namespace DoAnPhanMem.Controllers
             ViewBag.relatedproduct = db.Products.Where(item => item.status_ == "1" && item.pro_id != product.pro_id).Take(8).ToList();
             ViewBag.ProductImage = db.ProductImgs.Where(item => item.product_id == id).ToList();
             ViewBag.ListFeedback = db.Feedbacks.Where(m => m.status == "2").ToList();
-            ViewBag.ListReplyFeedback = db.ReplyFeedbacks.Where(m => m.status == "2").ToList();
+            //ViewBag.ListReplyFeedback = db.ReplyFeedbacks.Where(m => m.status == "2").ToList();
             ViewBag.CountFeedback = db.Feedbacks.Where(m => m.status == "2" && m.product_id == product.pro_id && m.replyfor == null).Count();
             ViewBag.OrderFeedback = db.Oder_Detail.ToList();
             var comments = db.Feedbacks.Where(m => m.product_id == product.pro_id && m.status == "2").OrderByDescending(m => m.create_at).ToList();

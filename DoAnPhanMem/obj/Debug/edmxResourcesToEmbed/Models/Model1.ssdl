@@ -150,17 +150,6 @@
     <Property Name="product_id" Type="int" Nullable="false" />
     <Property Name="image" Type="nvarchar" MaxLength="500" />
   </EntityType>
-  <EntityType Name="ReplyFeedback">
-    <Key>
-      <PropertyRef Name="rep_feed_id" />
-    </Key>
-    <Property Name="rep_feed_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="content" Type="nvarchar(max)" />
-    <Property Name="status" Type="nvarchar" MaxLength="1" />
-    <Property Name="feedback_id" Type="int" Nullable="false" />
-    <Property Name="acc_id" Type="int" Nullable="false" />
-    <Property Name="create_at" Type="datetime" />
-  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="role_id" />
@@ -346,30 +335,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_ReplyFeedback_Account">
-    <End Role="Account" Type="Self.Account" Multiplicity="1" />
-    <End Role="ReplyFeedback" Type="Self.ReplyFeedback" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Account">
-        <PropertyRef Name="acc_id" />
-      </Principal>
-      <Dependent Role="ReplyFeedback">
-        <PropertyRef Name="acc_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ReplyFeedback_Feedback">
-    <End Role="Feedback" Type="Self.Feedback" Multiplicity="1" />
-    <End Role="ReplyFeedback" Type="Self.ReplyFeedback" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Feedback">
-        <PropertyRef Name="feedback_id" />
-      </Principal>
-      <Dependent Role="ReplyFeedback">
-        <PropertyRef Name="feedback_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityContainer Name="WebshopModelStoreContainer">
     <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AccountAddress" EntityType="Self.AccountAddress" Schema="dbo" store:Type="Tables" />
@@ -384,7 +349,6 @@
     <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductImg" EntityType="Self.ProductImg" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ReplyFeedback" EntityType="Self.ReplyFeedback" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Account_Role" Association="Self.FK_Account_Role">
@@ -442,14 +406,6 @@
     <AssociationSet Name="FK_ProductImg_Product" Association="Self.FK_ProductImg_Product">
       <End Role="Product" EntitySet="Product" />
       <End Role="ProductImg" EntitySet="ProductImg" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ReplyFeedback_Account" Association="Self.FK_ReplyFeedback_Account">
-      <End Role="Account" EntitySet="Account" />
-      <End Role="ReplyFeedback" EntitySet="ReplyFeedback" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ReplyFeedback_Feedback" Association="Self.FK_ReplyFeedback_Feedback">
-      <End Role="Feedback" EntitySet="Feedback" />
-      <End Role="ReplyFeedback" EntitySet="ReplyFeedback" />
     </AssociationSet>
   </EntityContainer>
 </Schema>
