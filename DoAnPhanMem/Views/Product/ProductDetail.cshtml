@@ -9,7 +9,6 @@
     var relatedproduct = (List<DoAnPhanMem.Models.Product>)ViewBag.relatedproduct;
     var listImage = (List<DoAnPhanMem.Models.ProductImg>)ViewBag.ProductImage;
     var listFeedback = (List<DoAnPhanMem.Models.Feedback>)ViewBag.ListFeedback;
-    var listReplyFeedback = (List<DoAnPhanMem.Models.ReplyFeedback>)ViewBag.ListReplyFeedback;
     var OrderFeedback = (List<DoAnPhanMem.Models.Oder_Detail>)ViewBag.OrderFeedback;
     var pagerFeekback = (PagedList.PagedList<DoAnPhanMem.Models.Feedback>)ViewBag.PagerFeedback;
     var culture = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
@@ -407,16 +406,24 @@
                                                                         @comment.Account.acc_name
                                                                         <span>
                                                                             @{ string fbconfirm = "";
+                                                                                string checkadmin = "";
                                                                                 string verify = "";
                                                                                 foreach (var odt in OrderFeedback)
                                                                                 {
+                                                                                    if (comment.Account.Role.role_name == "Admin")
+                                                                                    {
+                                                                                        checkadmin = "Quản trị viên";
+                                                                                        verify = "<i class='fa fa-check-circle' aria-hidden='true'></i>";
+                                                                                    }
                                                                                     if (odt.Order.acc_id == comment.account_id && odt.pro_id == comment.product_id && odt.Order.status == "3")
                                                                                     {
                                                                                         fbconfirm = "Đã mua hàng";
                                                                                         verify = "<i class='fa fa-check-circle' aria-hidden='true'></i>";
                                                                                     }
                                                                                 }
+                                                                                <span class="fs-14px text-success"><span class="bg-role" style="margin-left:3px;">@checkadmin</span></span>
                                                                                 <span class="fs-14px text-success">@Html.Raw(verify)<span style="margin-left:3px;">@fbconfirm</span></span>
+
                                                                             }
                                                                         </span>
                                                                     </h6>
