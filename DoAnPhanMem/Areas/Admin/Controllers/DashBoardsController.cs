@@ -10,7 +10,6 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
     public class DashBoardsController : Controller
     {
         private WebshopEntities db = new WebshopEntities();
-        // GET: Admin/DashBoards
         public ActionResult Index()
         {
             ViewBag.Order = db.Orders.ToList();

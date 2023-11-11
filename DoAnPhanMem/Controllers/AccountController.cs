@@ -141,7 +141,7 @@ namespace DoAnPhanMem.Controllers
             db.Entry(TK).State = EntityState.Modified;
             db.SaveChanges();
             Notification.setNotification3s("Cập nhật thông tin thành công", "success");
-            return View(acc);
+            return RedirectToAction("Editprofile");
         }
         public JsonResult UpdateAvatar()
         {

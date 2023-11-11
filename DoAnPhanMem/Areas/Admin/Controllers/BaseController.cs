@@ -1,9 +1,13 @@
-﻿using System;
+﻿using DoAnPhanMem.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Data.Entity;
+using DoAnPhanMem;
+
 
 namespace DoAnPhanMem.Areas.Admin.Controllers
 {
@@ -12,13 +16,10 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         // GET: Admin/Base
         public BaseController()
         {
-            if (!System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+            if (Session["TaiKhoan"] != null)
             {
-                System.Web.HttpContext.Current.Response.Redirect("~/Home/Index");
-            }
-            else
-            {
-                if (System.Web.HttpContext.Current.User.IsInRole("Member"))
+                var user = Session["TaiKhoan"] as Account;
+                if (user.Role.role_name != "Admin" || user.Role.role_name != "Nhân viên")
                 {
                     System.Web.HttpContext.Current.Response.Redirect("~/Home/Index");
                 }
