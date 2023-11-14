@@ -27,7 +27,7 @@ namespace DoAnPhanMem.Controllers
         public ActionResult ProductsByBrand(int brandId, int? page)
         {
             ViewBag.Type = db.Brands.FirstOrDefault(m => m.brand_id == brandId).brand_name;
-            return View("Index", GetProduct(m => m.status_ == "1" && m.cate_id == brandId, page));
+            return View("Index", GetProduct(m => m.status_ == "1" && m.brand_id == brandId, page));
         }
 
         public ActionResult SearchResult(int? page, string s)
