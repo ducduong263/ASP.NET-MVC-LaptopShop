@@ -91,8 +91,8 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
                     var fileName = Path.GetFileNameWithoutExtension(product.ImageUpload.FileName);
                     var extension = Path.GetExtension(product.ImageUpload.FileName);
                     fileName = fileName + DateTime.Now.ToString("HH-mm-dd-MM-yyyy") + extension;
-                    product.pro_img = "/Content/Images/" + fileName;
-                    product.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/"), fileName));
+                    product.pro_img = "/Content/Images/product/" + fileName;
+                    product.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/product/"), fileName));
                 }
                 else
                 {
@@ -149,8 +149,8 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
                     var fileName = Path.GetFileNameWithoutExtension(model.ImageUpload.FileName);
                     var extension = Path.GetExtension(model.ImageUpload.FileName);
                     fileName = fileName + extension;
-                    product.pro_img = "/Content/Images/" + fileName;
-                    model.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/"), fileName));
+                    product.pro_img = "/Content/Images/product/" + fileName;
+                    model.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/Images/product/"), fileName));
                 }
                 product.pro_name = model.pro_name;
                 product.quantity = model.quantity;

@@ -171,7 +171,17 @@
                             <hr />
                             <div class="cart_subtotal">
                                 <p>Thành tiền </p>
-                                <p style="font-size: 20px; color: rgb(235, 33, 1);" class="cart_amount totalPriceWithFee">@(@ViewBag.Total.ToString("#,0₫", culture.NumberFormat))</p>
+                                @if (ViewBag.Total > 0)
+                                {
+                                    <p style="font-size: 20px; color: rgb(235, 33, 1);" class="cart_amount totalPriceWithFee">@(@ViewBag.Total.ToString("#,0₫", culture.NumberFormat))</p>
+
+                                }
+                                else
+                                {
+                                    <p style="font-size: 20px; color: rgb(235, 33, 1);" class="cart_amount totalPriceWithFee">0đ</p>
+
+                                }
+
                             </div>
                             <div class="checkout_btn">
                                 <a href="@Url.Action("Checkout","Cart")" class="btn btn-md btn-golden">Hoàn tất thanh toán</a>

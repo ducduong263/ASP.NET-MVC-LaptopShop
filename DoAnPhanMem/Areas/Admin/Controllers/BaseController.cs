@@ -16,14 +16,11 @@ namespace DoAnPhanMem.Areas.Admin.Controllers
         // GET: Admin/Base
         public BaseController()
         {
-            if (Session["TaiKhoan"] != null)
-            {
                 var user = Session["TaiKhoan"] as Account;
                 if (user.Role.role_name != "Admin" || user.Role.role_name != "Nhân viên")
                 {
                     System.Web.HttpContext.Current.Response.Redirect("~/Home/Index");
                 }
-            }
         }
         //đăng xuất admin quay về trang chủ
         public ActionResult Logout()

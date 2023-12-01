@@ -30,13 +30,6 @@
                                             Sản phẩm
                                         </a>
                                     </li>
-                                    <li>
-                                        <p hidden>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-                                    </li>
-                                    <li>
-                                    </li>
-                                    <li>
-                                    </li>
                                     @if (taiKhoan != null)
                                     {
                                         if (taiKhoan.role_id == 1)
@@ -48,7 +41,7 @@
                                         else
                                         {
                                             <li>
-                                                <a href="#">Liên Hệ</a>
+                                                <a href="@Url.Action("Contact","Home")">Liên Hệ</a>
                                             </li>
                                         }
                                         <li class="has-dropdown has-megaitem">
@@ -64,7 +57,7 @@
                                     else
                                     {
                                         <li>
-                                            <a href="#">Liên Hệ</a>
+                                            <a href="@Url.Action("Contact","Home")">Liên Hệ</a>
                                         </li>
                                         <li class="has-dropdown has-megaitem">
                                             <a href="@Url.Action("Login","Account")">Đăng nhập</a>
@@ -91,12 +84,6 @@
                                     <i class="icon-magnifier"></i>
                                 </a>
                             </li>
-                            @*<li>
-                                <a href="#offcanvas-about"
-                                   class="offacnvas offside-about offcanvas-toggle">
-                                    <i class="icon-menu"></i>
-                                </a>
-                            </li>*@
                         </ul>
                         <!-- End Header Action Link -->
                     </div>

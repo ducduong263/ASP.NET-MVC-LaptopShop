@@ -18,12 +18,6 @@ namespace DoAnPhanMem
               url: "search",
              defaults: new { controller = "Product", action = "SearchResult" }
            );
-           //  routes.MapRoute(
-           //   name: "product",
-           //   url: "product",
-           //  defaults: new { controller = "Product", action = "Index" }
-           //);
-            //rút gọn link chi tiết sản phẩm
             routes.MapRoute(
               name: "chi tiet san pham",
               url: "{slug}-{id}",
@@ -86,13 +80,7 @@ namespace DoAnPhanMem
                 url: "register",
                 defaults: new { controller = "Account", action = "Register", id = UrlParameter.Optional }
             );
-            //thay đổi mật khảu
-           // routes.MapRoute(
-           //   name: "doi mat khau",
-           //   url: "change_password",
-           //   defaults: new { controller = "Account", action = "ChangePassword", id = UrlParameter.Optional }
-           //);
-            //xem chi tiết đơn hàng
+
             routes.MapRoute(
               name: "chi tiet don hang",
               url: "order_detail/{id}",
@@ -117,16 +105,11 @@ namespace DoAnPhanMem
               url: "reset_password",
               defaults: new { controller = "Account", action = "ResetPassword", id = UrlParameter.Optional }
            );
-            //gửi yêu cầu hồ trợ
-            routes.MapRoute(
-              name: "sent request",
-              url: "request",
-              defaults: new { controller = "Home", action = "SentRequest", id = UrlParameter.Optional }
-           );
+
             //set error 404
             routes.MapRoute(
               name: "Page Not Found",
-              url: "pagenotfound/{id}",
+              url: "pagenotfound",
               defaults: new { controller = "Home", action = "PageNotFound", id = UrlParameter.Optional }
            );
             //link mặc định khi khởi động
@@ -134,14 +117,10 @@ namespace DoAnPhanMem
              name: "Default",
              url: "{controller}/{action}/{id}",
              defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-         );
-            //routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            //routes.MapRoute(
-            //    name: "Default",
-            //    url: "{controller}/{action}/{id}",
-            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            //);
+         );
+            //routes.MapRoute("NotFound", "{*url}", new { controller = "Home", action = "PageNotFound" });
+
         }
     }
 }
